@@ -26,10 +26,6 @@ The simplified workflow will be as follows:
 - 4. Upload the points to Qdrant (the vector database service)
 
 
-```
-Raw Data → Clean Documents → Embeddings → Vector DB (Qdrant)
-```
-
 ![](img/rag_part1.png)
 
 # Prepare your environment
@@ -118,7 +114,8 @@ from qdrant_client import QdrantClient
 client_qdrant = QdrantClient(
     url=os.environ["QDRANT_URL"],
     api_key=os.environ["QDRANT_API_KEY"],
-    port=os.environ["QDRANT_API_PORT"]
+    port=os.environ["QDRANT_API_PORT"],
+    check_compatibility=False
 )
 
 collections = client_qdrant.get_collections()
@@ -158,7 +155,7 @@ con.execute("LOAD httpfs;")
 
 path_nace = 'https://minio.lab.sspcloud.fr/projet-formation/diffusion/funathon/2026/project2/NACE_Rev2.1_Structure_Explanatory_Notes_EN.tsv'
 query_definition = f"SELECT * FROM read_csv('{path_nace}')"
-table = con.execute(query_definition).fetch_arrow_table()
+table = con.execute(query_definition).to_arrow_table()
 nace = table.to_pylist()
 
 nace[22]
@@ -810,7 +807,7 @@ for nace_code in nace[:sample_size]:
 
 nace_points = []
 
-for nace_code in nace[]:
+for nace_code in nace:
     nace_doc = NaceDocument.from_raw(
         raw=nace_code,
         with_includes_also=True, 
