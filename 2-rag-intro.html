@@ -178,7 +178,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   <ul class="collapse">
   <li><a href="#the-problem-classifying-free-text-labels" id="toc-the-problem-classifying-free-text-labels" class="nav-link" data-scroll-target="#the-problem-classifying-free-text-labels"><span class="header-section-number">1.1</span> The problem: classifying free-text labels</a></li>
   <li><a href="#a-solution-retrieval-augmented-generation" id="toc-a-solution-retrieval-augmented-generation" class="nav-link" data-scroll-target="#a-solution-retrieval-augmented-generation"><span class="header-section-number">1.2</span> A solution: Retrieval-Augmented Generation</a></li>
-  <li><a href="#rag-or-fine-tuning" id="toc-rag-or-fine-tuning" class="nav-link" data-scroll-target="#rag-or-fine-tuning"><span class="header-section-number">1.3</span> RAG or fine-tuning?</a></li>
+  <li><a href="#rag-or-fine-tuning-a-usual-ml-classifier" id="toc-rag-or-fine-tuning-a-usual-ml-classifier" class="nav-link" data-scroll-target="#rag-or-fine-tuning-a-usual-ml-classifier"><span class="header-section-number">1.3</span> RAG or fine-tuning a usual ML classifier?</a></li>
   </ul></li>
   <li><a href="#what-will-you-learn-in-this-tutorial" id="toc-what-will-you-learn-in-this-tutorial" class="nav-link" data-scroll-target="#what-will-you-learn-in-this-tutorial"><span class="header-section-number">2</span> What will you learn in this tutorial?</a>
   <ul class="collapse">
@@ -266,9 +266,9 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </div>
 </div>
 </section>
-<section id="rag-or-fine-tuning" class="level2" data-number="1.3">
-<h2 data-number="1.3" class="anchored" data-anchor-id="rag-or-fine-tuning"><span class="header-section-number">1.3</span> RAG or fine-tuning?</h2>
-<p>Fine-tuning is a legitimate alternative that can yield excellent results when a large annotated dataset is available and the nomenclature is stable. The catch is that retraining is required each time the nomenclature changes, and building a quality training set takes real annotation effort.</p>
+<section id="rag-or-fine-tuning-a-usual-ml-classifier" class="level2" data-number="1.3">
+<h2 data-number="1.3" class="anchored" data-anchor-id="rag-or-fine-tuning-a-usual-ml-classifier"><span class="header-section-number">1.3</span> RAG or fine-tuning a usual ML classifier?</h2>
+<p>Fine-tuning a usual ML classifier (like a FastText model) is a legitimate alternative that can yield excellent results when a large annotated dataset is available and the nomenclature is stable. The catch is that retraining is required each time the nomenclature changes, and building a quality training set takes real annotation effort.</p>
 <p>With RAG, the <strong>knowledge lives in the <a href="#vec-db">vector database</a> rather than in the model weights</strong>. Updating the nomenclature means re-indexing the changed entries — no retraining needed. This makes it a natural fit for statistical nomenclatures, which do evolve over time (NACE 2.1 being a recent example). That said, RAG is not annotation-free either: a labelled evaluation set is still needed to measure pipeline performance and tune its components. The right choice between the two approaches depends on data availability, update frequency, and available compute.</p>
 <hr>
 </section>
@@ -400,7 +400,7 @@ Warning
 <section id="getting-your-llm.lab-api-key" class="level3" data-number="3.2.1">
 <h3 data-number="3.2.1" class="anchored" data-anchor-id="getting-your-llm.lab-api-key"><span class="header-section-number">3.2.1</span> Getting your llm.lab API key</h3>
 <ol type="1">
-<li>Go to the llm.lab interface and sign in with your SSPCloud account.</li>
+<li>Go to the <a href="https://llm.lab.sspcloud.fr/">llm.lab interface</a> and sign in with your SSPCloud account.</li>
 <li>Open <strong>Settings</strong> (top right) → <strong>Account</strong> → <strong>API Keys</strong>.</li>
 <li>Generate a new key and copy it into <code>LLMLAB_API_KEY</code>.</li>
 </ol>
@@ -431,6 +431,13 @@ Warning
 <figcaption>Retrieving the Qdrant token</figcaption>
 </figure>
 </div>
+<p>You can also access your Qdrant Api key when you click on “Open” the Qdrant service. The password shown in the pop-up bubble is your API key.</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><a href="img/qdrant_token_2.png" class="lightbox" data-gallery="quarto-lightbox-gallery-5" title="Another way to retrieve the Qdrant token"><img src="img/qdrant_token_2.png" class="img-fluid figure-img" alt="Another way to retrieve the Qdrant token"></a></p>
+<figcaption>Another way to retrieve the Qdrant token</figcaption>
+</figure>
+</div>
 </section>
 </section>
 <section id="loading-credentials-in-python" class="level2" data-number="3.3">
@@ -445,6 +452,7 @@ Warning
 <span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(<span class="st">"QDRANT_URL loaded successfully"</span>)</span>
 <span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a><span class="cf">except</span> <span class="pp">KeyError</span>:</span>
 <span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a>    <span class="cf">raise</span> <span class="pp">ValueError</span>(<span class="st">"QDRANT_URL is not set — check your .env file"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p>If <code>load_dotenv()</code> doesn’t work but every thing seems fine, don’t forget to make sure that Python runs in the right working directory with <code>os.getcwd()</code>and <code>os.chdir("funathon-project2)</code>.</p>
 
 
 </section>
