@@ -620,12 +620,12 @@ Tip
 Keys: ['code', 'name', 'label']</code></pre>
 </div>
 <div id="get-data" class="cell-output cell-output-display" data-execution_count="8">
-<pre><code>[{'code': '55.90',
-  'name': 'Other accommodation',
-  'label': 'Furnished rental accommodations under one year'},
- {'code': '75.00',
-  'name': 'Veterinary activities',
-  'label': 'Clinical care for companion animals'}]</code></pre>
+<pre><code>[{'code': '62.10',
+  'name': 'Computer programming activities',
+  'label': 'Bespoke application coding and integration'},
+ {'code': '96.22',
+  'name': 'Beauty care and other beauty treatment activities',
+  'label': 'Manicure and pedicure provision'}]</code></pre>
 </div>
 </div>
 <div class="callout callout-style-default callout-note callout-titled">
@@ -867,48 +867,48 @@ Note
 <tbody>
 <tr class="odd">
 <th data-quarto-table-cell-role="th">0</th>
-<td>Furnished rental accommodations under one year</td>
-<td>55.90</td>
-<td>55.90</td>
+<td>Bespoke application coding and integration</td>
+<td>62.10</td>
+<td>62.10</td>
 <td>True</td>
 <td>True</td>
 <td>True</td>
 </tr>
 <tr class="even">
 <th data-quarto-table-cell-role="th">1</th>
-<td>Clinical care for companion animals</td>
-<td>75.00</td>
-<td>75.00</td>
+<td>Manicure and pedicure provision</td>
+<td>96.22</td>
+<td>96.22</td>
 <td>True</td>
 <td>True</td>
 <td>True</td>
 </tr>
 <tr class="odd">
 <th data-quarto-table-cell-role="th">2</th>
-<td>Installation of vehicle charging stations</td>
-<td>43.21</td>
-<td>43.21</td>
-<td>True</td>
-<td>True</td>
-<td>True</td>
+<td>Pension scheme administration</td>
+<td>66.30</td>
+<td>66.2</td>
+<td>False</td>
+<td>False</td>
+<td>None</td>
 </tr>
 <tr class="even">
 <th data-quarto-table-cell-role="th">3</th>
-<td>Market entry strategy formulation</td>
-<td>70.20</td>
-<td>70.2</td>
-<td>False</td>
-<td>False</td>
-<td>None</td>
+<td>Annuity and life insurance representation</td>
+<td>66.22</td>
+<td>66.22</td>
+<td>True</td>
+<td>True</td>
+<td>True</td>
 </tr>
 <tr class="odd">
 <th data-quarto-table-cell-role="th">4</th>
-<td>Broad bean agricultural activities.</td>
-<td>01.11</td>
-<td>NaN</td>
-<td>False</td>
-<td>False</td>
-<td>None</td>
+<td>Interior door installation</td>
+<td>43.32</td>
+<td>43.32</td>
+<td>True</td>
+<td>True</td>
+<td>True</td>
 </tr>
 </tbody>
 </table>
@@ -932,8 +932,8 @@ Note
 <span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"  → </span><span class="sc">{</span>results[<span class="st">'retriever_hit'</span>]<span class="sc">.</span><span class="bu">sum</span>()<span class="sc">}</span><span class="ss"> / </span><span class="sc">{</span><span class="bu">len</span>(results)<span class="sc">}</span><span class="ss"> correctly retrieved"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </details>
 <div class="cell-output cell-output-stdout">
-<pre><code>Retriever@5 accuracy: 47.0%
-  → 47 / 100 correctly retrieved</code></pre>
+<pre><code>Retriever@5 accuracy: 54.0%
+  → 54 / 100 correctly retrieved</code></pre>
 </div>
 </div>
 <hr>
@@ -954,8 +954,8 @@ Note
 <span id="cb20-5"><a href="#cb20-5" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"  → </span><span class="sc">{</span>retriever_success[<span class="st">'pipeline_correct'</span>]<span class="sc">.</span><span class="bu">sum</span>()<span class="sc">}</span><span class="ss"> / </span><span class="sc">{</span><span class="bu">len</span>(retriever_success)<span class="sc">}</span><span class="ss"> correctly coded by the LLM"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </details>
 <div class="cell-output cell-output-stdout">
-<pre><code>LLM accuracy (conditional on retriever): 97.9%
-  → 46 / 47 correctly coded by the LLM</code></pre>
+<pre><code>LLM accuracy (conditional on retriever): 98.1%
+  → 53 / 54 correctly coded by the LLM</code></pre>
 </div>
 </div>
 <hr>
@@ -976,10 +976,10 @@ Note
 <span id="cb22-6"><a href="#cb22-6" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"Cross-check: Retriever@k × LLM = </span><span class="sc">{</span>retriever_accuracy<span class="sc">:.3f}</span><span class="ss"> × </span><span class="sc">{</span>llm_accuracy<span class="sc">:.3f}</span><span class="ss"> = </span><span class="sc">{</span>retriever_accuracy <span class="op">*</span> llm_accuracy<span class="sc">:.1%}</span><span class="ss">"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </details>
 <div class="cell-output cell-output-stdout">
-<pre><code>Pipeline accuracy (end-to-end)          : 46.0%
-  → 46 / 100 correctly coded
+<pre><code>Pipeline accuracy (end-to-end)          : 53.0%
+  → 53 / 100 correctly coded
 
-Cross-check: Retriever@k × LLM = 0.470 × 0.979 = 46.0%</code></pre>
+Cross-check: Retriever@k × LLM = 0.540 × 0.981 = 53.0%</code></pre>
 </div>
 </div>
 <hr>
@@ -1014,13 +1014,13 @@ Cross-check: Retriever@k × LLM = 0.470 × 0.979 = 46.0%</code></pre>
       DASHBOARD — RAG PIPELINE NACE 2.1
 ====================================================
   Activities processed        :    100
-  Correctly coded             :     46  (46.0%)
+  Correctly coded             :     53  (53.0%)
 
-  Retriever@5 accuracy        :  47.0%
-  LLM accuracy (conditional)  :  97.9%
-  Pipeline accuracy           :  46.0%
+  Retriever@5 accuracy        :  54.0%
+  LLM accuracy (conditional)  :  98.1%
+  Pipeline accuracy           :  53.0%
 
-  Retriever errors            :     53  (53.0%)
+  Retriever errors            :     46  (46.0%)
   LLM errors                  :      1  (1.0%)
 ====================================================</code></pre>
 </div>
@@ -1146,7 +1146,7 @@ Important
 <span id="cb26-55"><a href="#cb26-55" aria-hidden="true" tabindex="-1"></a>display(p1)</span>
 <span id="cb26-56"><a href="#cb26-56" aria-hidden="true" tabindex="-1"></a>display(p2)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </details>
-<div id="confidence-analysis" class="cell quarto-layout-panel" data-execution_count="17" data-layout-ncol="2">
+<div id="confidence-analysis" class="cell quarto-layout-panel" data-layout-ncol="2" data-execution_count="17">
 <div class="quarto-layout-row">
 <div class="quarto-layout-cell" style="flex-basis: 50.0%;justify-content: center;">
 <p><a href="2-rag-generation_files/figure-html/confidence-analysis-output-1.png" class="lightbox" data-gallery="quarto-lightbox-gallery-3"><img src="2-rag-generation_files/figure-html/confidence-analysis-output-1.png" id="confidence-analysis-1" class="img-fluid" width="672"></a></p>
