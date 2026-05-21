@@ -222,6 +222,17 @@ window.Quarto = {
   <li><a href="#inference-loop" id="toc-inference-loop" class="nav-link" data-scroll-target="#inference-loop">Inference loop</a></li>
   </ul></li>
   <li><a href="#pipeline-evaluation" id="toc-pipeline-evaluation" class="nav-link" data-scroll-target="#pipeline-evaluation">Pipeline evaluation</a></li>
+  <li><a href="#what-you-learned-and-how-to-go-further" id="toc-what-you-learned-and-how-to-go-further" class="nav-link" data-scroll-target="#what-you-learned-and-how-to-go-further">What you learned — and how to go further</a>
+  <ul class="collapse">
+  <li><a href="#key-concepts-of-the-rag-approach" id="toc-key-concepts-of-the-rag-approach" class="nav-link" data-scroll-target="#key-concepts-of-the-rag-approach">Key concepts of the RAG approach</a></li>
+  <li><a href="#what-to-try-next" id="toc-what-to-try-next" class="nav-link" data-scroll-target="#what-to-try-next">What to try next</a>
+  <ul class="collapse">
+  <li><a href="#improve-the-retriever" id="toc-improve-the-retriever" class="nav-link" data-scroll-target="#improve-the-retriever">Improve the retriever</a></li>
+  <li><a href="#improve-the-generator" id="toc-improve-the-generator" class="nav-link" data-scroll-target="#improve-the-generator">Improve the generator</a></li>
+  <li><a href="#better-evaluation" id="toc-better-evaluation" class="nav-link" data-scroll-target="#better-evaluation">Better evaluation</a></li>
+  <li><a href="#production-considerations" id="toc-production-considerations" class="nav-link" data-scroll-target="#production-considerations">Production considerations</a></li>
+  </ul></li>
+  </ul></li>
   </ul>
 <div class="toc-actions"><ul><li><a href="https://github.com/AIML4OS/funathon-project2/edit/main/2-rag-generation.qmd" class="toc-action"><i class="bi bi-github"></i>Edit this page</a></li><li><a href="https://github.com/AIML4OS/funathon-project2/issues/new" class="toc-action"><i class="bi empty"></i>Report an issue</a></li></ul></div></nav>
     </div>
@@ -645,12 +656,12 @@ Tip
 Keys: ['code', 'name', 'label']</code></pre>
 </div>
 <div id="get-data" class="cell-output cell-output-display" data-execution_count="9">
-<pre><code>[{'code': '68.20',
+<pre><code>[{'code': '70.20',
+  'name': 'Business and other management consultancy activities',
+  'label': 'Implementation of cost optimization strategies'},
+ {'code': '68.20',
   'name': 'Rental and operating of own or leased real estate',
-  'label': 'Long-term property leasing activities'},
- {'code': '43.31',
-  'name': 'Plastering',
-  'label': 'Ceiling plaster application'}]</code></pre>
+  'label': 'Self-owned building operation activities'}]</code></pre>
 </div>
 </div>
 <div class="callout callout-style-default callout-note callout-titled">
@@ -890,45 +901,45 @@ Note
 <tbody>
 <tr class="odd">
 <th data-quarto-table-cell-role="th">0</th>
-<td>Long-term property leasing activities</td>
-<td>68.20</td>
-<td>68.20</td>
-<td>True</td>
-<td>True</td>
-<td>True</td>
+<td>Implementation of cost optimization strategies</td>
+<td>70.20</td>
+<td>NaN</td>
+<td>False</td>
+<td>False</td>
+<td>None</td>
 </tr>
 <tr class="even">
 <th data-quarto-table-cell-role="th">1</th>
-<td>Ceiling plaster application</td>
-<td>43.31</td>
-<td>43.31</td>
-<td>True</td>
-<td>True</td>
-<td>True</td>
+<td>Self-owned building operation activities</td>
+<td>68.20</td>
+<td>68.2</td>
+<td>False</td>
+<td>False</td>
+<td>None</td>
 </tr>
 <tr class="odd">
 <th data-quarto-table-cell-role="th">2</th>
-<td>Print and digital publishing ventures</td>
-<td>58.13</td>
-<td>58.1</td>
+<td>Provision of meals at customer premises</td>
+<td>56.21</td>
+<td>56.1</td>
 <td>False</td>
 <td>False</td>
 <td>None</td>
 </tr>
 <tr class="even">
 <th data-quarto-table-cell-role="th">3</th>
-<td>Strategic business improvement programs</td>
-<td>70.20</td>
-<td>70.2</td>
-<td>False</td>
-<td>False</td>
-<td>None</td>
+<td>Decorative wall plastering</td>
+<td>43.31</td>
+<td>43.31</td>
+<td>True</td>
+<td>True</td>
+<td>True</td>
 </tr>
 <tr class="odd">
 <th data-quarto-table-cell-role="th">4</th>
-<td>Commercial drywall construction</td>
-<td>43.31</td>
-<td>43.31</td>
+<td>Holistic wellness course provision</td>
+<td>85.59</td>
+<td>85.59</td>
 <td>True</td>
 <td>True</td>
 <td>True</td>
@@ -955,8 +966,8 @@ Note
 <span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"  → </span><span class="sc">{</span>results[<span class="st">'retriever_hit'</span>]<span class="sc">.</span><span class="bu">sum</span>()<span class="sc">}</span><span class="ss"> / </span><span class="sc">{</span><span class="bu">len</span>(results)<span class="sc">}</span><span class="ss"> correctly retrieved"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </details>
 <div class="cell-output cell-output-stdout">
-<pre><code>Retriever@5 accuracy: 57.0%
-  → 57 / 100 correctly retrieved</code></pre>
+<pre><code>Retriever@5 accuracy: 45.0%
+  → 45 / 100 correctly retrieved</code></pre>
 </div>
 </div>
 <hr>
@@ -977,8 +988,8 @@ Note
 <span id="cb20-5"><a href="#cb20-5" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"  → </span><span class="sc">{</span>retriever_success[<span class="st">'pipeline_correct'</span>]<span class="sc">.</span><span class="bu">sum</span>()<span class="sc">}</span><span class="ss"> / </span><span class="sc">{</span><span class="bu">len</span>(retriever_success)<span class="sc">}</span><span class="ss"> correctly coded by the LLM"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </details>
 <div class="cell-output cell-output-stdout">
-<pre><code>LLM accuracy (conditional on retriever): 87.7%
-  → 50 / 57 correctly coded by the LLM</code></pre>
+<pre><code>LLM accuracy (conditional on retriever): 91.1%
+  → 41 / 45 correctly coded by the LLM</code></pre>
 </div>
 </div>
 <hr>
@@ -999,10 +1010,10 @@ Note
 <span id="cb22-6"><a href="#cb22-6" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"Cross-check: Retriever@k × LLM = </span><span class="sc">{</span>retriever_accuracy<span class="sc">:.3f}</span><span class="ss"> × </span><span class="sc">{</span>llm_accuracy<span class="sc">:.3f}</span><span class="ss"> = </span><span class="sc">{</span>retriever_accuracy <span class="op">*</span> llm_accuracy<span class="sc">:.1%}</span><span class="ss">"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </details>
 <div class="cell-output cell-output-stdout">
-<pre><code>Pipeline accuracy (end-to-end)          : 51.0%
-  → 51 / 100 correctly coded
+<pre><code>Pipeline accuracy (end-to-end)          : 41.0%
+  → 41 / 100 correctly coded
 
-Cross-check: Retriever@k × LLM = 0.570 × 0.877 = 50.0%</code></pre>
+Cross-check: Retriever@k × LLM = 0.450 × 0.911 = 41.0%</code></pre>
 </div>
 </div>
 <hr>
@@ -1043,14 +1054,14 @@ Cross-check: Retriever@k × LLM = 0.570 × 0.877 = 50.0%</code></pre>
       DASHBOARD — RAG PIPELINE NACE 2.1
 ====================================================
   Activities processed        :    100
-  Correctly coded             :     51  (51.0%)
+  Correctly coded             :     41  (41.0%)
 
-  Retriever@5 accuracy        :  57.0%
-  LLM accuracy (conditional)  :  87.7%
-  Pipeline accuracy           :  51.0%
+  Retriever@5 accuracy        :  45.0%
+  LLM accuracy (conditional)  :  91.1%
+  Pipeline accuracy           :  41.0%
 
-  Retriever errors            :     43  (43.0%)
-  LLM errors                  :      7  (7.0%)
+  Retriever errors            :     55  (55.0%)
+  LLM errors                  :      4  (4.0%)
 ====================================================</code></pre>
 </div>
 </div>
@@ -1351,7 +1362,10 @@ Note
 <span id="cb28-132"><a href="#cb28-132" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 </div>
-<hr>
+</section>
+</div>
+</div>
+</div>
 </section>
 <section id="what-you-learned-and-how-to-go-further" class="level1">
 <h1>What you learned — and how to go further</h1>
@@ -1403,10 +1417,6 @@ Note
 
 </section>
 </section>
-</section>
-</div>
-</div>
-</div>
 </section>
 
 </main> <!-- /main -->
