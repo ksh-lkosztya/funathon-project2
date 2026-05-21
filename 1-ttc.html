@@ -850,9 +850,9 @@ Clue here
 </div>
 <div id="callout-15" class="callout-15-contents callout-collapse collapse show">
 <div class="callout-body-container callout-body">
-<section id="question-1-generate-top-3-predictions-with-confidence-scores" class="level2" data-number="7.1">
-<h2 data-number="7.1" class="anchored" data-anchor-id="question-1-generate-top-3-predictions-with-confidence-scores"><span class="header-section-number">7.1</span> Question 1 — Generate top-3 predictions with confidence scores</h2>
-<p>Call <code>ttc.predict(np.array(example_texts), top_k=3, explain_with_captum=True)</code>. The result is a dict with keys <code>prediction</code>, <code>confidence</code> and <code>captum_attributions</code> among others.</p>
+<section id="question-1-generate-top-5-predictions-with-confidence-scores" class="level2" data-number="7.1">
+<h2 data-number="7.1" class="anchored" data-anchor-id="question-1-generate-top-5-predictions-with-confidence-scores"><span class="header-section-number">7.1</span> Question 1 — Generate top-5 predictions with confidence scores</h2>
+<p>Sample some text from the <code>X_text</code> array in a variable called <code>example_texts</code>. Call <code>ttc.predict(np.array(example_texts), top_k=5, explain_with_captum=True)</code>. The result is a dict with keys <code>prediction</code>, <code>confidence</code> and <code>captum_attributions</code> among others.</p>
 <div id="predict-examples" class="cell" data-execution_count="12">
 <details class="code-fold">
 <summary>Click to see the answer</summary>
@@ -911,23 +911,22 @@ Clue here
 <span id="cb18-10"><a href="#cb18-10" aria-hidden="true" tabindex="-1"></a>word_ids            <span class="op">=</span> results[<span class="st">"word_ids"</span>][text_idx]</span>
 <span id="cb18-11"><a href="#cb18-11" aria-hidden="true" tabindex="-1"></a>predicted_code <span class="op">=</span> results[<span class="st">"prediction"</span>][text_idx][top_k_idx]</span>
 <span id="cb18-12"><a href="#cb18-12" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb18-13"><a href="#cb18-13" aria-hidden="true" tabindex="-1"></a><span class="co"># Average attention over heads, pick the row for the predicted class</span></span>
-<span id="cb18-14"><a href="#cb18-14" aria-hidden="true" tabindex="-1"></a>attributions  <span class="op">=</span> results[<span class="st">"captum_attributions"</span>][text_idx][top_k_idx] <span class="co"># (seq_len,)</span></span>
-<span id="cb18-15"><a href="#cb18-15" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb18-16"><a href="#cb18-16" aria-hidden="true" tabindex="-1"></a>words, word_attributions <span class="op">=</span> map_attributions_to_word(</span>
-<span id="cb18-17"><a href="#cb18-17" aria-hidden="true" tabindex="-1"></a>    attributions.unsqueeze(<span class="dv">0</span>), text_sample, word_ids, offsets</span>
-<span id="cb18-18"><a href="#cb18-18" aria-hidden="true" tabindex="-1"></a>)</span>
-<span id="cb18-19"><a href="#cb18-19" aria-hidden="true" tabindex="-1"></a>char_attributions <span class="op">=</span> map_attributions_to_char(attributions.unsqueeze(<span class="dv">0</span>), offsets, text_sample)</span>
-<span id="cb18-20"><a href="#cb18-20" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb18-21"><a href="#cb18-21" aria-hidden="true" tabindex="-1"></a>titles <span class="op">=</span> [<span class="ss">f"Attributions for NACE code </span><span class="sc">{</span>predicted_code<span class="sc">}</span><span class="ss">"</span>]</span>
-<span id="cb18-22"><a href="#cb18-22" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb18-23"><a href="#cb18-23" aria-hidden="true" tabindex="-1"></a>figshow(plot_attributions_at_char(</span>
-<span id="cb18-24"><a href="#cb18-24" aria-hidden="true" tabindex="-1"></a>    text<span class="op">=</span>text_sample, attributions_per_char<span class="op">=</span>char_attributions, titles<span class="op">=</span>titles,</span>
-<span id="cb18-25"><a href="#cb18-25" aria-hidden="true" tabindex="-1"></a>)[<span class="dv">0</span>])</span>
-<span id="cb18-26"><a href="#cb18-26" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb18-27"><a href="#cb18-27" aria-hidden="true" tabindex="-1"></a>figshow(plot_attributions_at_word(</span>
-<span id="cb18-28"><a href="#cb18-28" aria-hidden="true" tabindex="-1"></a>    text<span class="op">=</span>text_sample, words<span class="op">=</span>words.values(), attributions_per_word<span class="op">=</span>word_attributions, titles<span class="op">=</span>titles,</span>
-<span id="cb18-29"><a href="#cb18-29" aria-hidden="true" tabindex="-1"></a>)[<span class="dv">0</span>])</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<span id="cb18-13"><a href="#cb18-13" aria-hidden="true" tabindex="-1"></a>attributions  <span class="op">=</span> results[<span class="st">"captum_attributions"</span>][text_idx][top_k_idx] <span class="co"># (seq_len,)</span></span>
+<span id="cb18-14"><a href="#cb18-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-15"><a href="#cb18-15" aria-hidden="true" tabindex="-1"></a>words, word_attributions <span class="op">=</span> map_attributions_to_word(</span>
+<span id="cb18-16"><a href="#cb18-16" aria-hidden="true" tabindex="-1"></a>    attributions.unsqueeze(<span class="dv">0</span>), text_sample, word_ids, offsets</span>
+<span id="cb18-17"><a href="#cb18-17" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb18-18"><a href="#cb18-18" aria-hidden="true" tabindex="-1"></a>char_attributions <span class="op">=</span> map_attributions_to_char(attributions.unsqueeze(<span class="dv">0</span>), offsets, text_sample)</span>
+<span id="cb18-19"><a href="#cb18-19" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-20"><a href="#cb18-20" aria-hidden="true" tabindex="-1"></a>titles <span class="op">=</span> [<span class="ss">f"Attributions for NACE code </span><span class="sc">{</span>predicted_code<span class="sc">}</span><span class="ss">"</span>]</span>
+<span id="cb18-21"><a href="#cb18-21" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-22"><a href="#cb18-22" aria-hidden="true" tabindex="-1"></a>figshow(plot_attributions_at_char(</span>
+<span id="cb18-23"><a href="#cb18-23" aria-hidden="true" tabindex="-1"></a>    text<span class="op">=</span>text_sample, attributions_per_char<span class="op">=</span>char_attributions, titles<span class="op">=</span>titles,</span>
+<span id="cb18-24"><a href="#cb18-24" aria-hidden="true" tabindex="-1"></a>)[<span class="dv">0</span>])</span>
+<span id="cb18-25"><a href="#cb18-25" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-26"><a href="#cb18-26" aria-hidden="true" tabindex="-1"></a>figshow(plot_attributions_at_word(</span>
+<span id="cb18-27"><a href="#cb18-27" aria-hidden="true" tabindex="-1"></a>    text<span class="op">=</span>text_sample, words<span class="op">=</span>words.values(), attributions_per_word<span class="op">=</span>word_attributions, titles<span class="op">=</span>titles,</span>
+<span id="cb18-28"><a href="#cb18-28" aria-hidden="true" tabindex="-1"></a>)[<span class="dv">0</span>])</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </details>
 </div>
 </section>
