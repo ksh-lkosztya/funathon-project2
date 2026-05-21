@@ -316,8 +316,10 @@ Important
 <section id="clone-your-fork-inside-the-service" class="level2" data-number="2.3">
 <h2 data-number="2.3" class="anchored" data-anchor-id="clone-your-fork-inside-the-service"><span class="header-section-number">2.3</span> Clone your fork inside the service</h2>
 <p>Open a terminal in the VS Code service and clone <strong>your fork</strong> (replace <code>&lt;YOUR_GITHUB_NAME&gt;</code> with your GitHub username):</p>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb1"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> clone https://github.com/<span class="op">&lt;</span>YOUR_GITHUB_NAME<span class="op">&gt;</span>/funathon-project2.git</span>
-<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="bu">cd</span> funathon-project2</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb1"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> clone https://<span class="op">&lt;</span>YOUR_GITHUB_TOKEN<span class="op">&gt;</span>@github.com/<span class="op">&lt;</span>YOUR_GITHUB_NAME<span class="op">&gt;</span>/funathon-project2.git</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> config <span class="at">--global</span> user.email <span class="st">"&lt;YOUR_EMAIL&gt;"</span></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> config <span class="at">--global</span> user.name <span class="st">"&lt;YOUR_GITHUB_NAME&gt;"</span></span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="bu">cd</span> funathon-project2</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </section>
 <section id="install-dependencies-with-uv-sync" class="level2" data-number="2.4">
 <h2 data-number="2.4" class="anchored" data-anchor-id="install-dependencies-with-uv-sync"><span class="header-section-number">2.4</span> Install dependencies with <code>uv sync</code></h2>
