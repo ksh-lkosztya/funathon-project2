@@ -1135,7 +1135,8 @@ To sample random texts, you can use for instance <code>random.sample(range(len(X
 <p>In this notebook we learnt how to:</p>
 <ul>
 <li><strong>Load and explore</strong> a labelled dataset of business activity descriptions mapped to NACE codes.</li>
-<li><strong>Split</strong> the data into train, validation, and test sets, and encode the string labels to integers with <code>LabelEncoder</code>.</li>
+<li><strong>Preprocess</strong> the data: split into train, validation, and test sets, and encode the string labels to integers with <code>LabelEncoder</code>.</li>
+<li><strong>Use the <code>torchTextClassifiers</code> package</strong> to handle the full workflow: encoding textual labels, training a tokenizer, building a classifier, and explaining its predictions.</li>
 <li><strong>Train a WordPiece tokenizer</strong> from scratch on the training corpus, adapting the subword vocabulary to French domain-specific text.</li>
 <li><strong>Configure and train</strong> a neural text classifier end-to-end using <code>torchTextClassifiers</code>, with <a href="https://mlflow.org/docs/latest/index.html">MLflow</a> tracking metrics in real time.</li>
 <li><strong>Load a pretrained model</strong> from <a href="https://mlflow.org/docs/latest/index.html">MLflow</a> artefact storage, so the full-dataset model is available without waiting hours for training.</li>
