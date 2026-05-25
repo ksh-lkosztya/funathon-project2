@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en-US" xml:lang="en-US"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.9.37">
+<meta name="generator" content="quarto-1.9.38">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
@@ -77,7 +77,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <script src="site_libs/quarto-html/tippy.umd.min.js"></script>
 <script src="site_libs/quarto-html/anchor.min.js"></script>
 <link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="site_libs/quarto-html/quarto-syntax-highlighting-7f8f88aac4f3542376d5c11b86a4c14d.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting-15634bcf2e68342d4ad2dfa704d543f6.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
 <link href="site_libs/bootstrap/bootstrap-5a3d0b27430484980d075601037230b8.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
@@ -315,7 +315,7 @@ Important
 </section>
 <section id="clone-your-fork-inside-the-service" class="level2" data-number="2.3">
 <h2 data-number="2.3" class="anchored" data-anchor-id="clone-your-fork-inside-the-service"><span class="header-section-number">2.3</span> Clone your fork inside the service</h2>
-<p>Open a terminal in the VS Code service and clone <strong>your fork</strong> (replace <code>&lt;YOUR_GITHUB_NAME&gt;</code> with your GitHub username):</p>
+<p>Open a terminal in the VS Code service and clone <strong>your fork</strong> (replace <code>&lt;YOUR_GITHUB_NAME&gt;</code> with your GitHub username, <code>&lt;YOUR_GITHUB_TOKEN&gt;</code> with your token, and so on):</p>
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb1"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> clone https://<span class="op">&lt;</span>YOUR_GITHUB_TOKEN<span class="op">&gt;</span>@github.com/<span class="op">&lt;</span>YOUR_GITHUB_NAME<span class="op">&gt;</span>/funathon-project2.git</span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> config <span class="at">--global</span> user.email <span class="st">"&lt;YOUR_EMAIL&gt;"</span></span>
 <span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> config <span class="at">--global</span> user.name <span class="st">"&lt;YOUR_GITHUB_NAME&gt;"</span></span>
@@ -344,7 +344,7 @@ Important
 </section>
 <section id="run-code-interactively-optional-but-recommended" class="level2" data-number="2.6">
 <h2 data-number="2.6" class="anchored" data-anchor-id="run-code-interactively-optional-but-recommended"><span class="header-section-number">2.6</span> Run code interactively (optional but recommended)</h2>
-<p>For exploration, debugging, or quick experiments, the easiest workflow is to create your own scripts at the <strong>root of the repository</strong>. A useful pattern in VS Code is to use <strong>cell markers</strong> (<code># %%</code>) inside a regular <code>.py</code> file: each <code># %%</code> block becomes individually runnable, with outputs and plots rendered inline in the editor. It works like a notebook, but with the simplicity of a plain Python file.</p>
+<p>For exploration, debugging, or quick experiments, the easiest workflow is to create your own scripts at the <strong>root of the repository</strong>. A useful pattern in VS Code is to use <strong>cell markers</strong> (<code># %%</code>) inside a regular <code>.py</code> file: each <code># %%</code> block becomes individually runnable, with outputs and plots rendered inline in the editor. It works like a Jupyter notebook, but with the simplicity of a plain Python file.</p>
 <p>Example (<code>scratch.py</code> at the root of the repo):</p>
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="co"># %%</span></span>
 <span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="co"># If you need to change working directory (default is your interactive .py file location)</span></span>
@@ -360,7 +360,7 @@ Important
 <span id="cb4-12"><a href="#cb4-12" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb4-13"><a href="#cb4-13" aria-hidden="true" tabindex="-1"></a><span class="co"># %%</span></span>
 <span id="cb4-14"><a href="#cb4-14" aria-hidden="true" tabindex="-1"></a>df[<span class="st">"code"</span>].value_counts().head(<span class="dv">10</span>).plot(kind<span class="op">=</span><span class="st">"bar"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<p>A small “Run Cell” lens appears above each <code># %%</code> marker. Click it to execute that block. This is convenient for iterating on small pieces of code or testing specific functions from the project.</p>
+<p>A small “Run Cell” lens appears above each <code># %%</code> marker. Click it to execute that block. You can also use the shortcut <kbd>Shift</kbd> + <kbd>Enter</kbd>. This is convenient for iterating on small pieces of code or testing specific functions from the project.</p>
 <div class="callout callout-style-default callout-tip callout-titled">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
