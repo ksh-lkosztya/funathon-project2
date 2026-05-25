@@ -656,12 +656,12 @@ Tip
 Keys: ['code', 'name', 'label']</code></pre>
 </div>
 <div id="get-data" class="cell-output cell-output-display" data-execution_count="9">
-<pre><code>[{'code': '68.20',
+<pre><code>[{'code': '96.22',
+  'name': 'Beauty care and other beauty treatment activities',
+  'label': 'Beauty salon and spa service provision'},
+ {'code': '68.20',
   'name': 'Rental and operating of own or leased real estate',
-  'label': 'Property investment and rental business'},
- {'code': '66.12',
-  'name': 'Security and commodity contracts brokerage',
-  'label': 'Arranging trades in standardized derivatives'}]</code></pre>
+  'label': 'Self-owned real estate management'}]</code></pre>
 </div>
 </div>
 <div class="callout callout-style-default callout-note callout-titled">
@@ -901,48 +901,48 @@ Note
 <tbody>
 <tr class="odd">
 <th data-quarto-table-cell-role="th">0</th>
-<td>Property investment and rental business</td>
-<td>68.20</td>
-<td>68.20</td>
+<td>Beauty salon and spa service provision</td>
+<td>96.22</td>
+<td>96.22</td>
 <td>True</td>
 <td>True</td>
 <td>True</td>
 </tr>
 <tr class="even">
 <th data-quarto-table-cell-role="th">1</th>
-<td>Arranging trades in standardized derivatives</td>
-<td>66.12</td>
-<td>66.1</td>
+<td>Self-owned real estate management</td>
+<td>68.20</td>
+<td>68.2</td>
 <td>False</td>
 <td>False</td>
 <td>None</td>
 </tr>
 <tr class="odd">
 <th data-quarto-table-cell-role="th">2</th>
-<td>Insurance contract negotiation support</td>
-<td>66.22</td>
-<td>66.22</td>
+<td>Beauty salon operations</td>
+<td>96.22</td>
+<td>96.22</td>
 <td>True</td>
 <td>True</td>
 <td>True</td>
 </tr>
 <tr class="even">
 <th data-quarto-table-cell-role="th">3</th>
-<td>Systems software adaptation for clients</td>
-<td>62.10</td>
-<td>62.1</td>
+<td>Community based support for social inclusion</td>
+<td>88.99</td>
+<td>88.1</td>
 <td>False</td>
 <td>False</td>
 <td>None</td>
 </tr>
 <tr class="odd">
 <th data-quarto-table-cell-role="th">4</th>
-<td>Third-party marketing and sales of goods</td>
-<td>46.19</td>
-<td>47.91</td>
-<td>False</td>
-<td>False</td>
-<td>None</td>
+<td>Non-accredited language learning programs</td>
+<td>85.59</td>
+<td>85.59</td>
+<td>True</td>
+<td>True</td>
+<td>True</td>
 </tr>
 </tbody>
 </table>
@@ -966,8 +966,8 @@ Note
 <span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"  → </span><span class="sc">{</span>results[<span class="st">'retriever_hit'</span>]<span class="sc">.</span><span class="bu">sum</span>()<span class="sc">}</span><span class="ss"> / </span><span class="sc">{</span><span class="bu">len</span>(results)<span class="sc">}</span><span class="ss"> correctly retrieved"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </details>
 <div class="cell-output cell-output-stdout">
-<pre><code>Retriever@5 accuracy: 52.0%
-  → 52 / 100 correctly retrieved</code></pre>
+<pre><code>Retriever@5 accuracy: 61.0%
+  → 61 / 100 correctly retrieved</code></pre>
 </div>
 </div>
 <hr>
@@ -988,8 +988,8 @@ Note
 <span id="cb20-5"><a href="#cb20-5" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"  → </span><span class="sc">{</span>retriever_success[<span class="st">'pipeline_correct'</span>]<span class="sc">.</span><span class="bu">sum</span>()<span class="sc">}</span><span class="ss"> / </span><span class="sc">{</span><span class="bu">len</span>(retriever_success)<span class="sc">}</span><span class="ss"> correctly coded by the LLM"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </details>
 <div class="cell-output cell-output-stdout">
-<pre><code>LLM accuracy (conditional on retriever): 94.2%
-  → 49 / 52 correctly coded by the LLM</code></pre>
+<pre><code>LLM accuracy (conditional on retriever): 90.2%
+  → 55 / 61 correctly coded by the LLM</code></pre>
 </div>
 </div>
 <hr>
@@ -1010,10 +1010,10 @@ Note
 <span id="cb22-6"><a href="#cb22-6" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"Cross-check: Retriever@k × LLM = </span><span class="sc">{</span>retriever_accuracy<span class="sc">:.3f}</span><span class="ss"> × </span><span class="sc">{</span>llm_accuracy<span class="sc">:.3f}</span><span class="ss"> = </span><span class="sc">{</span>retriever_accuracy <span class="op">*</span> llm_accuracy<span class="sc">:.1%}</span><span class="ss">"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </details>
 <div class="cell-output cell-output-stdout">
-<pre><code>Pipeline accuracy (end-to-end)          : 49.0%
-  → 49 / 100 correctly coded
+<pre><code>Pipeline accuracy (end-to-end)          : 55.0%
+  → 55 / 100 correctly coded
 
-Cross-check: Retriever@k × LLM = 0.520 × 0.942 = 49.0%</code></pre>
+Cross-check: Retriever@k × LLM = 0.610 × 0.902 = 55.0%</code></pre>
 </div>
 </div>
 <hr>
@@ -1054,14 +1054,14 @@ Cross-check: Retriever@k × LLM = 0.520 × 0.942 = 49.0%</code></pre>
       DASHBOARD — RAG PIPELINE NACE 2.1
 ====================================================
   Activities processed        :    100
-  Correctly coded             :     49  (49.0%)
+  Correctly coded             :     55  (55.0%)
 
-  Retriever@5 accuracy        :  52.0%
-  LLM accuracy (conditional)  :  94.2%
-  Pipeline accuracy           :  49.0%
+  Retriever@5 accuracy        :  61.0%
+  LLM accuracy (conditional)  :  90.2%
+  Pipeline accuracy           :  55.0%
 
-  Retriever errors            :     48  (48.0%)
-  LLM errors                  :      3  (3.0%)
+  Retriever errors            :     39  (39.0%)
+  LLM errors                  :      6  (6.0%)
 ====================================================</code></pre>
 </div>
 </div>

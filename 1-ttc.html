@@ -112,12 +112,41 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <script src="site_libs/quarto-diagram/mermaid-init.js"></script>
 <link href="site_libs/quarto-diagram/mermaid.css" rel="stylesheet">
 
+  <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
+  <script defer="" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN" && texText && texText.data) {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
 
 <meta property="og:title" content="Supervised approach using TorchTextClassifiers – AIML4OS Funathon - Project 2">
 <meta property="og:description" content="Automatic classification">
-<meta property="og:image" content="https://AIML4OS.github.io/funathon-project2/img/ttc_architecture.png">
+<meta property="og:image" content="https://AIML4OS.github.io/funathon-project2/img/embedding_pipeline.svg">
 <meta property="og:site_name" content="AIML4OS Funathon - Project 2">
-<meta property="og:image:alt" content="torchTextClassifier architecture overview">
+<meta property="og:image:alt" content="From raw text to a dense vector">
 </head>
 
 <body class="nav-fixed quarto-light">
@@ -416,7 +445,7 @@ The <code>.n_unique()</code> method in Polars may help you computing the number 
 </div>
 </div>
 <div class="callout callout-style-default callout-tip no-icon callout-titled">
-<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-5-contents" aria-controls="callout-5" aria-expanded="true" aria-label="Toggle callout">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-6-contents" aria-controls="callout-6" aria-expanded="true" aria-label="Toggle callout">
 <div class="callout-icon-container">
 <i class="callout-icon no-icon"></i>
 </div>
@@ -425,7 +454,7 @@ The <code>.n_unique()</code> method in Polars may help you computing the number 
 </div>
 <div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
 </div>
-<div id="callout-5" class="callout-5-contents callout-collapse collapse show">
+<div id="callout-6" class="callout-6-contents callout-collapse collapse show">
 <div class="callout-body-container callout-body">
 <section id="question-1-split-the-dataset-into-train-validation-test-sets" class="level2" data-number="3.1">
 <h2 data-number="3.1" class="anchored" data-anchor-id="question-1-split-the-dataset-into-train-validation-test-sets"><span class="header-section-number">3.1</span> Question 1 — Split the dataset into train / validation / test sets</h2>
@@ -455,7 +484,7 @@ Clue here
 <section id="question-2-encode-the-labels" class="level2" data-number="3.2">
 <h2 data-number="3.2" class="anchored" data-anchor-id="question-2-encode-the-labels"><span class="header-section-number">3.2</span> Question 2 — Encode the labels</h2>
 <p>The <code>code</code> column contains strings like <code>"47.11A"</code> (codes from the NACE classification). Neural networks do not understand strings and require integer targets (1, 2, 3…), so we need to map each unique NACE code to an integer index. To do that, you will use an encoder.</p>
-<p>Use <code>LabelEncoder</code> from <code>sklearn.preprocessing</code> (see <a href="https://scikit-learn.org/stable/modules/generated/sklearn.preprocessing.LabelEncoder.html">here</a> for the documentation). Call <code>.fit()</code> on all codes, then <code>.transform()</code> on each split. Extract numpy arrays with <code>.to_numpy()</code>.</p>
+<p>Use <code>LabelEncoder</code> from <code>sklearn.preprocessing</code> (see <a href="https://scikit-learn.org/stable/modules/generated/sklearn.preprocessing.LabelEncoder.html">here</a> for the documentation). Call <code>.fit()</code> on the <code>code</code> column of your training dataframe (after having converted it to a numpy array with <code>.to_numpy()</code>).</p>
 <div class="callout callout-style-simple callout-note callout-titled">
 <div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-3-contents" aria-controls="callout-3" aria-expanded="false" aria-label="Toggle callout">
 <div class="callout-icon-container">
@@ -468,7 +497,7 @@ Clue here
 </div>
 <div id="callout-3" class="callout-3-contents callout-collapse collapse">
 <div class="callout-body-container callout-body">
-<p>We use <code>LabelEncoder</code> to map the categorical target <code>y</code> to integers <code>0, 1, …, n_classes - 1</code>, the format expected by scikit-learn classifiers. It should not be used on input features, however: for those, <code>OrdinalEncoder</code> or <code>OneHotEncoder</code> is preferred, because <code>LabelEncoder</code> is designed for a 1D target and does not handle unseen categories at inference time.</p>
+<p>We use <code>LabelEncoder</code> to map the categorical target <code>y</code> to integers <code>0, 1, …, n_classes - 1</code>, the format expected by scikit-learn classifiers.</p>
 </div>
 </div>
 </div>
@@ -511,10 +540,26 @@ Clue here
 </details>
 </div>
 </section>
-<section id="question-3-prepare-the-labels-to-use-them-wityh-ttc" class="level2" data-number="3.3">
-<h2 data-number="3.3" class="anchored" data-anchor-id="question-3-prepare-the-labels-to-use-them-wityh-ttc"><span class="header-section-number">3.3</span> Question 3 — Prepare the labels to use them wityh <code>ttc</code></h2>
-<p><code>torchTextClassifiers</code> provides the <code>ValueEncoder</code> object to deal with textual labels. You simply need to feed the fitted <code>LabelEncoder</code> to the <code>ValueEncoder</code>.</p>
-<p>Create a <code>ValueEncoder</code> ….. TO BE COMLETED BY MEILAME</p>
+<section id="question-3-prepare-the-labels-to-use-them-with-ttc" class="level2" data-number="3.3">
+<h2 data-number="3.3" class="anchored" data-anchor-id="question-3-prepare-the-labels-to-use-them-with-ttc"><span class="header-section-number">3.3</span> Question 3 — Prepare the labels to use them with <code>ttc</code></h2>
+<p><code>torchTextClassifiers</code> requires labels to be wrapped in a <code>ValueEncoder</code> object. This is straightforward: you just pass your already-fitted <code>LabelEncoder</code> to the <code>ValueEncoder</code> constructor.</p>
+<p>Import the <code>ValueEncoder</code> class from the <code>torchTextClassifiers.value_encoder</code> subpackage, then create a <code>value_encoder</code> object by passing your fitted <code>label_encoder</code> as an argument.</p>
+<div class="callout callout-style-simple callout-note callout-titled">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-5-contents" aria-controls="callout-5" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Note</span>Why wrap the LabelEncoder in a ValueEncoder?
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-5" class="callout-5-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<p>While <code>LabelEncoder</code> plays the role of the “converter” from string labels to integers, working with raw integers at prediction time can be cumbersome — you have to manually map predictions back to their original label names. The <code>ValueEncoder</code> solves this by integrating tightly with the <code>torchTextClassifiers</code> ecosystem: when you pass it to a model, predictions are automatically returned as human-readable labels rather than integers. As a bonus, <code>ValueEncoder</code> also supports additional categorical input features — advanced readers can find examples <a href="https://inseefrlab.github.io/torchTextClassifiers/tutorials/mixed_features.html">here</a>.</p>
+</div>
+</div>
+</div>
 <div id="value-encoder" class="cell" data-execution_count="7">
 <details class="code-fold">
 <summary>Click to see the answer</summary>
@@ -589,7 +634,7 @@ Clue here
 <p><strong>WordPiece</strong>, the algorithm used here, builds a vocabulary of frequent subword units from the training corpus. Words it has never seen can still be represented by combining known fragments. The <code>##</code> prefix marks a fragment that continues the previous token (i.e.&nbsp;it is not the start of a new word).</p>
 <p>Because the vocabulary is learned from your data, it naturally adapts to domain-specific vocabulary; in our case, French business descriptions full of technical terms.</p>
 <div class="callout callout-style-simple callout-note callout-titled">
-<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-6-contents" aria-controls="callout-6" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-7-contents" aria-controls="callout-7" aria-expanded="false" aria-label="Toggle callout">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
 </div>
@@ -598,7 +643,7 @@ Clue here
 </div>
 <div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
 </div>
-<div id="callout-6" class="callout-6-contents callout-collapse collapse">
+<div id="callout-7" class="callout-7-contents callout-collapse collapse">
 <div class="callout-body-container callout-body">
 <ul>
 <li>The <a href="https://huggingface.co/docs/transformers/tokenizer_summary">Hugging Face tokenizer documentation</a> gives a clear overview of the main tokenization strategies (BPE, WordPiece, Unigram).</li>
@@ -608,7 +653,7 @@ Clue here
 </div>
 </div>
 <div class="callout callout-style-default callout-tip no-icon callout-titled">
-<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-8-contents" aria-controls="callout-8" aria-expanded="true" aria-label="Toggle callout">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-9-contents" aria-controls="callout-9" aria-expanded="true" aria-label="Toggle callout">
 <div class="callout-icon-container">
 <i class="callout-icon no-icon"></i>
 </div>
@@ -617,7 +662,7 @@ Clue here
 </div>
 <div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
 </div>
-<div id="callout-8" class="callout-8-contents callout-collapse collapse show">
+<div id="callout-9" class="callout-9-contents callout-collapse collapse show">
 <section id="question-1-train-the-tokenizer-and-inspect-a-sample" class="level2 callout-body-container callout-body" data-number="4.3">
 <h2 data-number="4.3" class="anchored" data-anchor-id="question-1-train-the-tokenizer-and-inspect-a-sample"><span class="header-section-number">4.3</span> Question 1 — Train the tokenizer and inspect a sample</h2>
 <p>You are going to use a <code>WordPieceTokenizer</code> from the <code>torchTextClassifiers</code> package (see the <a href="https://inseefrlab.github.io/torchTextClassifiers/api/tokenizers.html">documentation</a>). Train a <code>WordPieceTokenizer</code> from scratch on the training labels with <code>vocab_size=5000</code> and <code>output_dim=10</code>. Use the fitted tokenizer to tokenize one observations (with the <code>tokenize</code> method), and inspect the result to understand how the text is split.</p>
@@ -628,7 +673,7 @@ Clue here
 Instantiate <code>WordPieceTokenizer(vocab_size=5000, output_dim=10)</code> and call <code>.train(X_train)</code>. Use <code>.tokenize()</code> and <code>.convert_ids_to_tokens()</code> to inspect a sample.
 </details>
 <div class="callout callout-style-default callout-warning callout-titled">
-<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-7-contents" aria-controls="callout-7" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-8-contents" aria-controls="callout-8" aria-expanded="false" aria-label="Toggle callout">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
 </div>
@@ -637,7 +682,7 @@ Instantiate <code>WordPieceTokenizer(vocab_size=5000, output_dim=10)</code> and 
 </div>
 <div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
 </div>
-<div id="callout-7" class="callout-7-contents callout-collapse collapse">
+<div id="callout-8" class="callout-8-contents callout-collapse collapse">
 <div class="callout-body-container callout-body">
 <p>Always train the tokenizer on <code>X_train</code> only — never on the validation or test sets. Using the full dataset would mean the tokenizer has seen vocabulary from examples the model is supposed to predict.</p>
 </div>
@@ -675,23 +720,60 @@ Instantiate <code>WordPieceTokenizer(vocab_size=5000, output_dim=10)</code> and 
 </section>
 <section id="model-architecture" class="level1" data-number="5">
 <h1 data-number="5"><span class="header-section-number">5</span> Model architecture</h1>
-<p>A text classification model in <code>torchTextClassifiers</code> is built from three components:</p>
+<p>A text classification model in <code>torchTextClassifiers</code> is built from three components (on top of the <code>ValueEncoder</code> and the tokenizer seen above):</p>
 <ol type="1">
-<li><p><a href="https://inseefrlab.github.io/torchTextClassifiers/architecture/overview.html#component-2-text-embedding-pipeline-tokenembedder-sentenceembedder"><strong>TextEmbedder</strong></a>: converts token IDs into dense vectors (<em>embeddings</em>) of size <code>embedding_dim</code>. A self-attention layer can be added to capture word order and context.</p></li>
-<li><p><a href="https://inseefrlab.github.io/torchTextClassifiers/architecture/overview.html#component-3-categorical-variable-handler"><strong>CategoricalVariableNet</strong></a> <em>(optional)</em>: encodes additional categorical features and merges them with the text representation. <strong>Not used in this dataset.</strong></p></li>
-<li><p><a href="https://inseefrlab.github.io/torchTextClassifiers/architecture/overview.html#component-4-classification-head"><strong>ClassificationHead</strong></a>: projects the final representation onto <code>num_classes</code> dimensions. The highest value determines the predicted class.</p></li>
+<li><a href="https://inseefrlab.github.io/torchTextClassifiers/architecture/overview.html#component-2-text-embedding-pipeline-tokenembedder-sentenceembedder"><strong>TextEmbedder</strong></a>: converts token IDs into dense vectors (<em>embeddings</em>) of size <code>embedding_dim</code>.</li>
 </ol>
+<div class="callout callout-style-simple callout-note callout-titled">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-10-contents" aria-controls="callout-10" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Note</span>Embeddings, a key concept in NLP models
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-10" class="callout-10-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<p><strong>The problem:</strong> computers can’t work with words directly — they need numbers. A naive solution is to assign each word a unique integer (its <em>token ID</em>). But this is useless for learning: the number <code>2345</code> tells the model nothing about what “cat” <em>means</em>, and gives no hint that “cat” and “kitten” should be treated similarly.</p>
+<p><strong>The idea:</strong> instead of a single integer, represent each token as a <strong>dense vector</strong> — a list of, say, 768 floating-point numbers. This vector is the word’s <strong>embedding</strong>: its coordinates in a high-dimensional “semantic space”.</p>
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><a href="img/ttc_architecture.png" class="lightbox" data-gallery="quarto-lightbox-gallery-1" title="torchTextClassifier architecture overview"><img src="img/ttc_architecture.png" class="img-fluid figure-img" alt="torchTextClassifier architecture overview"></a></p>
-<figcaption>torchTextClassifier architecture overview</figcaption>
+<p><a href="img/embedding_pipeline.svg" class="lightbox" data-gallery="quarto-lightbox-gallery-1" title="From raw text to a dense vector"><img src="img/embedding_pipeline.svg" class="img-fluid figure-img" style="width:100.0%" alt="From raw text to a dense vector"></a></p>
+<figcaption>From raw text to a dense vector</figcaption>
 </figure>
 </div>
+<p><strong>Where do these numbers come from?</strong> The embedding vectors are <strong>learned parameters</strong> of the model, initialised randomly and updated during training just like any other weight. The training signal pushes the model to give similar vectors to words that behave similarly in context. After training, words with related meanings end up close together in embedding space.</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><a href="img/embedding_space.svg" class="lightbox" data-gallery="quarto-lightbox-gallery-2" title="Words projected into a 2D embedding space — similar concepts cluster together"><img src="img/embedding_space.svg" class="img-fluid figure-img" style="width:100.0%" alt="Words projected into a 2D embedding space — similar concepts cluster together"></a></p>
+<figcaption>Words projected into a 2D embedding space — similar concepts cluster together</figcaption>
+</figure>
+</div>
+<p><strong>A memorable analogy:</strong> think of each word as a point on a map. Cities in the same country end up near each other; animals cluster together; food words form their own neighbourhood. The “distance” between two points reflects how semantically related the words are. This is why you can do things like:</p>
+<p><span class="math display">\[\text{vec}(\textit{king}) - \text{vec}(\textit{man}) + \text{vec}(\textit{woman}) \approx \text{vec}(\textit{queen})\]</span></p>
+<p>The geometry of the space encodes meaning.</p>
+<p><strong>In <code>torchTextClassifiers</code>:</strong> the <code>TextEmbedder</code> component takes a sequence of token IDs and looks up each one in a learnable <em>embedding matrix</em> (of shape <code>vocab_size × embedding_dim</code>), producing a sequence of dense vectors that the rest of the network can reason about.</p>
+</div>
+</div>
+</div>
+<ol start="2" type="1">
+<li><p><a href="https://inseefrlab.github.io/torchTextClassifiers/architecture/overview.html#component-3-categorical-variable-handler"><strong>CategoricalVariableNet</strong></a> <em>(optional)</em>: encodes additional categorical features and merges them with the text representation. <strong>Not used here.</strong></p></li>
+<li><p><a href="https://inseefrlab.github.io/torchTextClassifiers/architecture/overview.html#component-4-classification-head"><strong>ClassificationHead</strong></a>: projects the final representation onto <code>num_classes</code> dimensions. The highest value determines the predicted class.</p></li>
+</ol>
+<p><strong>To learn more about the building blocks of the torchTextClassifiers package, please visit the <a href="https://inseefrlab.github.io/torchTextClassifiers/architecture/index.html">documentation</a>.</strong></p>
 <p>These are configured through <code>ModelConfig</code> and assembled automatically by <code>torchTextClassifiers</code>. You can see some <code>ModelConfig</code> examples <a href="https://inseefrlab.github.io/torchTextClassifiers/architecture/overview.html#usage-examples">here</a> and for <code>torchTextClassifiers</code> <a href="https://inseefrlab.github.io/torchTextClassifiers/api/wrapper.html">here</a></p>
 </section>
 <section id="training" class="level1" data-number="6">
 <h1 data-number="6"><span class="header-section-number">6</span> Training</h1>
-<p>Training a neural network means finding the weights that minimise a <strong>loss function</strong> — a measure of how wrong the model’s predictions are. At each step, the model makes predictions on a <strong>mini-batch</strong> of examples, computes the loss, and updates the weights in the direction that reduces it (via <strong>gradient descent</strong>).</p>
+<p>Training a neural network means finding the weights that minimise a <strong>loss function</strong> — a measure of how wrong the model’s predictions are. At each step, the model makes predictions on a <strong>mini-batch</strong> of examples, computes the loss, and updates the weights in the direction that reduces it (via an optimization algorithm called the <strong>stochastic gradient descent</strong>).</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><a href="img/training_loop.svg" class="lightbox" data-gallery="quarto-lightbox-gallery-3" title="The training loop"><img src="img/training_loop.svg" class="img-fluid figure-img" style="width:100.0%" alt="The training loop"></a></p>
+<figcaption>The training loop</figcaption>
+</figure>
+</div>
 <p>Key training hyperparameters:</p>
 <ul>
 <li><code>num_epochs</code>: how many times the model sees the full training set.</li>
@@ -700,7 +782,7 @@ Instantiate <code>WordPieceTokenizer(vocab_size=5000, output_dim=10)</code> and 
 <li><code>patience_early_stopping</code>: stop training if the validation loss has not improved for this many epochs, to avoid overfitting.</li>
 </ul>
 <div class="callout callout-style-default callout-tip no-icon callout-titled">
-<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-14-contents" aria-controls="callout-14" aria-expanded="true" aria-label="Toggle callout">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-16-contents" aria-controls="callout-16" aria-expanded="true" aria-label="Toggle callout">
 <div class="callout-icon-container">
 <i class="callout-icon no-icon"></i>
 </div>
@@ -709,7 +791,7 @@ Instantiate <code>WordPieceTokenizer(vocab_size=5000, output_dim=10)</code> and 
 </div>
 <div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
 </div>
-<div id="callout-14" class="callout-14-contents callout-collapse collapse show">
+<div id="callout-16" class="callout-16-contents callout-collapse collapse show">
 <div class="callout-body-container callout-body">
 <p><code>torchTextClassifiers</code> provides a high-level wrapper that combines the value encoder, tokenizer, model components, and training loop. You will do two things: create a model, and then train the model. It is important to distinguish these two steps clearly. To do so, <code>torchTextClassifiers</code> offers two tools: <code>ModelConfig</code> defines the model and <code>TrainingConfig</code> defines the training process.</p>
 <section id="question-1-create-the-classifier" class="level2" data-number="6.1">
@@ -728,7 +810,7 @@ Clue here
 Build a <code>ModelConfig</code> with <code>embedding_dim</code> and <code>num_classes</code>. Pass both to <code>torchTextClassifiers(tokenizer=..., model_config=..., value_encoder=...)</code>.
 </details>
 <div class="callout callout-style-simple callout-note callout-titled">
-<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-9-contents" aria-controls="callout-9" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-11-contents" aria-controls="callout-11" aria-expanded="false" aria-label="Toggle callout">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
 </div>
@@ -737,7 +819,7 @@ Build a <code>ModelConfig</code> with <code>embedding_dim</code> and <code>num_c
 </div>
 <div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
 </div>
-<div id="callout-9" class="callout-9-contents callout-collapse collapse">
+<div id="callout-11" class="callout-11-contents callout-collapse collapse">
 <div class="callout-body-container callout-body">
 <p>The hyperparameter <code>embedding_dim</code> controls the size of the dense vector representing each token. Larger values capture more information but are slower to train.</p>
 </div>
@@ -771,7 +853,7 @@ Clue here
 Create a <code>TrainingConfig(lr=..., batch_size=..., num_epochs=...)</code> and call <code>ttc.train(X_train=..., y_train=..., X_val=..., y_val=..., training_config=..., verbose=True)</code>. Train on a small subsample so it completes quickly. <strong>Use only 1 epoch for fast training</strong>.
 </details>
 <div class="callout callout-style-simple callout-note callout-titled">
-<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-10-contents" aria-controls="callout-10" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-12-contents" aria-controls="callout-12" aria-expanded="false" aria-label="Toggle callout">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
 </div>
@@ -780,7 +862,7 @@ Create a <code>TrainingConfig(lr=..., batch_size=..., num_epochs=...)</code> and
 </div>
 <div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
 </div>
-<div id="callout-10" class="callout-10-contents callout-collapse collapse">
+<div id="callout-12" class="callout-12-contents callout-collapse collapse">
 <div class="callout-body-container callout-body">
 <p>Of course, you can play with hyperparameters if you want: add more epochs, change the learning rate and the batch size… But <strong>remember that you are training the model using CPUs, so avoid big models that will take a lot of time and resources to train</strong>.</p>
 </div>
@@ -793,7 +875,7 @@ Clue here
 Create a <code>TrainingConfig(lr=..., batch_size=..., num_epochs=...)</code>.
 </details>
 <div class="callout callout-style-simple callout-note callout-titled">
-<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-11-contents" aria-controls="callout-11" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-13-contents" aria-controls="callout-13" aria-expanded="false" aria-label="Toggle callout">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
 </div>
@@ -802,7 +884,7 @@ Create a <code>TrainingConfig(lr=..., batch_size=..., num_epochs=...)</code>.
 </div>
 <div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
 </div>
-<div id="callout-11" class="callout-11-contents callout-collapse collapse">
+<div id="callout-13" class="callout-13-contents callout-collapse collapse">
 <div class="callout-body-container callout-body">
 <p>Key hyperparameters used here:</p>
 <ul>
@@ -835,7 +917,7 @@ Clue here
 Call <code>ttc.train(X_train=..., y_train=..., X_val=..., y_val=..., training_config=..., verbose=True)</code>.
 </details>
 <div class="callout callout-style-simple callout-tip callout-titled">
-<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-12-contents" aria-controls="callout-12" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-14-contents" aria-controls="callout-14" aria-expanded="false" aria-label="Toggle callout">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
 </div>
@@ -844,7 +926,7 @@ Call <code>ttc.train(X_train=..., y_train=..., X_val=..., y_val=..., training_co
 </div>
 <div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
 </div>
-<div id="callout-12" class="callout-12-contents callout-collapse collapse">
+<div id="callout-14" class="callout-14-contents callout-collapse collapse">
 <div class="callout-body-container callout-body">
 <p>Use <code>mlflow.pytorch.autolog()</code> and wrap your training call in <code>mlflow.start_run()</code> to automatically log metrics (loss, accuracy) to an MLflow experiment:</p>
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb14"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a>mlflow.set_experiment(<span class="st">"my-experiment"</span>)</span>
@@ -884,7 +966,7 @@ Call <code>ttc.train(X_train=..., y_train=..., X_val=..., y_val=..., training_co
 </details>
 </div>
 <div class="callout callout-style-simple callout-tip callout-titled">
-<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-13-contents" aria-controls="callout-13" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-15-contents" aria-controls="callout-15" aria-expanded="false" aria-label="Toggle callout">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
 </div>
@@ -893,7 +975,7 @@ Call <code>ttc.train(X_train=..., y_train=..., X_val=..., y_val=..., training_co
 </div>
 <div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
 </div>
-<div id="callout-13" class="callout-13-contents callout-collapse collapse">
+<div id="callout-15" class="callout-15-contents callout-collapse collapse">
 <div class="callout-body-container callout-body">
 <p><code>torchTextClassifiers.load()</code> reads <code>model_checkpoint.ckpt</code>, <code>tokenizer.pkl</code>, <code>value_encoder.pkl</code>, and the metadata file that were saved by <code>ttc.save()</code> — the same files that <code>ttc.train()</code> produced.</p>
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb16"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="co">#| label: load-from-run</span></span>
@@ -949,7 +1031,7 @@ Call <code>ttc.train(X_train=..., y_train=..., X_val=..., y_val=..., training_co
 </div>
 </div>
 <div class="callout callout-style-default callout-tip no-icon callout-titled">
-<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-17-contents" aria-controls="callout-17" aria-expanded="true" aria-label="Toggle callout">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-19-contents" aria-controls="callout-19" aria-expanded="true" aria-label="Toggle callout">
 <div class="callout-icon-container">
 <i class="callout-icon no-icon"></i>
 </div>
@@ -958,7 +1040,7 @@ Call <code>ttc.train(X_train=..., y_train=..., X_val=..., y_val=..., training_co
 </div>
 <div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
 </div>
-<div id="callout-17" class="callout-17-contents callout-collapse collapse show">
+<div id="callout-19" class="callout-19-contents callout-collapse collapse show">
 <div class="callout-body-container callout-body">
 <section id="question-1-generate-top-5-predictions-with-confidence-scores" class="level2" data-number="7.1">
 <h2 data-number="7.1" class="anchored" data-anchor-id="question-1-generate-top-5-predictions-with-confidence-scores"><span class="header-section-number">7.1</span> Question 1 — Generate top-5 predictions with confidence scores</h2>
@@ -993,7 +1075,7 @@ The result is a dict with keys <code>prediction</code>, <code>confidence</code> 
 <h2 data-number="7.2" class="anchored" data-anchor-id="question-2-visualise-word-attributions-for-the-top-prediction"><span class="header-section-number">7.2</span> Question 2 — Visualise word attributions for the top prediction</h2>
 <p>Now, we want to retrieve the most important words driving the NACE prediction. During inference, the model computes an attribution score for each token — stored in the <code>captum_attributions</code> field of the results — indicating how much each token contributed to the final decision. To do so: - extract <code>captum_attributions</code> from results; - use <code>map_attributions_to_word()</code> and <code>map_attributions_to_char()</code> to aggregate token-level attribution scores up to the word and character levels; - visualize the resulting attributions with <code>plot_attributions_at_word()</code> and <code>plot_attributions_at_char()</code> from <code>torchTextClassifiers.utilities.plot_explainability</code>.</p>
 <div class="callout callout-style-simple callout-note callout-titled">
-<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-16-contents" aria-controls="callout-16" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-18-contents" aria-controls="callout-18" aria-expanded="false" aria-label="Toggle callout">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
 </div>
@@ -1002,7 +1084,7 @@ The result is a dict with keys <code>prediction</code>, <code>confidence</code> 
 </div>
 <div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
 </div>
-<div id="callout-16" class="callout-16-contents callout-collapse collapse">
+<div id="callout-18" class="callout-18-contents callout-collapse collapse">
 <div class="callout-body-container callout-body">
 <ul>
 <li><code>captum_attributions</code>: tensor of shape <code>(n_text, top_k, seq_len)</code> — attribution scores per token (how much a token has driven a given prediction).</li>
