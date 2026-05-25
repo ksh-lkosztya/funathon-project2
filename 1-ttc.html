@@ -1002,9 +1002,8 @@ Call <code>ttc.train(X_train=..., y_train=..., X_val=..., y_val=..., training_co
 <section id="prediction-and-explainability" class="level1" data-number="7">
 <h1 data-number="7"><span class="header-section-number">7</span> Prediction and explainability</h1>
 <p>Once the model is trained, we can use it to predict NACE codes for new text descriptions. Beyond a simple prediction, we also want to understand why a given NACE code was predicted — specifically, which words in the input text contributed the most to the decision.</p>
-<p>You can refer to this<a href="https://inseefrlab.github.io/torchTextClassifiers/tutorials/explainability.html">tutorial</a> on explainability for more details.</p>
-<p>To understand which tokens drove a prediction, we use <strong>captum’s <code>LayerIntegratedGradients</code></strong>, applied to the model’s embedding matrix. This method computes the gradient of the output with respect to each input token embedding, integrated along a path from a baseline — attributing a score to each token that reflects its contribution to the predicted class.</p>
-<p>You can see the documentation for <code>LayerIntegratedGradients</code> <a href="https://captum.ai/api/layer.html#layer-integrated-gradients">here</a></p>
+<p>You can refer to this <a href="https://inseefrlab.github.io/torchTextClassifiers/tutorials/explainability.html">tutorial</a> on explainability for more details.</p>
+<p>To understand which words influenced a prediction, we use a technique called <strong>integrated gradients</strong> (via Captum’s <code>LayerIntegratedGradients</code>). It assigns a score to each word in the input: a high score means that word pushed the model toward the predicted class.</p>
 <div class="callout callout-style-default callout-important callout-titled">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
@@ -1015,7 +1014,7 @@ Call <code>ttc.train(X_train=..., y_train=..., X_val=..., y_val=..., training_co
 </div>
 </div>
 <div class="callout-body-container callout-body">
-<p><code>LayerIntegratedGradients</code> provides a more faithful attribution than attention weights: it measures how much each token embedding actually influenced the model’s output, not merely which tokens the model attended to. That said, attributions depend on the choice of baseline and should still be treated as an exploratory tool rather than a definitive causal explanation.</p>
+<p>These scores are a useful guide, not a definitive explanation. Treat them as a way to explore the model’s behavior, not as proof of causality.</p>
 </div>
 </div>
 <div class="callout callout-style-default callout-tip no-icon callout-titled">
@@ -1032,31 +1031,29 @@ Call <code>ttc.train(X_train=..., y_train=..., X_val=..., y_val=..., training_co
 <div class="callout-body-container callout-body">
 <section id="question-1-generate-top-5-predictions-with-confidence-scores" class="level2" data-number="7.1">
 <h2 data-number="7.1" class="anchored" data-anchor-id="question-1-generate-top-5-predictions-with-confidence-scores"><span class="header-section-number">7.1</span> Question 1 — Generate top-5 predictions with confidence scores</h2>
-<p>Sample a few texts from the <code>X_test</code> array into a variable called<code>example_texts</code>. Then call <code>ttc.predict(np.array(example_texts), top_k=5, explain_with_captum=True)</code> and print the main fields of the resulting dictionary. The result is a dictionary with keys <code>prediction</code>, <code>confidence</code> and <code>captum_attributions</code> among others.</p>
+<p>Sample a few texts from the <code>X_test</code> array into a variable called <code>example_texts</code>. Then call <code>ttc.predict(np.array(example_texts), top_k=5, explain_with_captum=True)</code> and print the main fields of the resulting dictionary. The result is a dictionary with keys <code>prediction</code>, <code>confidence</code> and <code>captum_attributions</code> among others.</p>
 <details>
 <summary>
 Clue here
 </summary>
-The result is a dict with keys <code>prediction</code>, <code>confidence</code> and <code>captum_attributions</code> among others.
+To sample random texts, you can use for instance <code>random.sample(range(len(X_test)), 3)</code> to pick 3 random indices, then use them to index into <code>X_test</code>. Do not forget to import the <code>random</code> package.
 </details>
 <div id="predict-examples" class="cell" data-execution_count="13">
-<details class="code-fold">
-<summary>Click to see the answer</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb18"><pre class="sourceCode python code-overflow-scroll code-with-copy"><code class="sourceCode python"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> random</span>
-<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a>random_indices <span class="op">=</span> random.sample(<span class="bu">range</span>(<span class="bu">len</span>(X_test)), <span class="dv">3</span>)</span>
-<span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a>example_texts <span class="op">=</span> X_test[random_indices]</span>
-<span id="cb18-4"><a href="#cb18-4" aria-hidden="true" tabindex="-1"></a>example_true_codes <span class="op">=</span> y_test[random_indices]</span>
-<span id="cb18-5"><a href="#cb18-5" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(example_texts)</span>
-<span id="cb18-6"><a href="#cb18-6" aria-hidden="true" tabindex="-1"></a>top_k <span class="op">=</span> <span class="dv">5</span></span>
-<span id="cb18-7"><a href="#cb18-7" aria-hidden="true" tabindex="-1"></a>results <span class="op">=</span> ttc.predict(example_texts, top_k<span class="op">=</span>top_k, explain_with_captum<span class="op">=</span><span class="va">True</span>)</span>
-<span id="cb18-8"><a href="#cb18-8" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> i, text <span class="kw">in</span> <span class="bu">enumerate</span>(example_texts):</span>
-<span id="cb18-9"><a href="#cb18-9" aria-hidden="true" tabindex="-1"></a>    predicted_codes <span class="op">=</span> [results[<span class="st">"prediction"</span>][i][k] <span class="cf">for</span> k <span class="kw">in</span> <span class="bu">range</span>(top_k)]</span>
-<span id="cb18-10"><a href="#cb18-10" aria-hidden="true" tabindex="-1"></a>    confidence <span class="op">=</span> [results[<span class="st">"confidence"</span>][i][k].item() <span class="cf">for</span> k <span class="kw">in</span> <span class="bu">range</span>(top_k)]</span>
-<span id="cb18-11"><a href="#cb18-11" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(<span class="ss">f"</span><span class="ch">\n</span><span class="ss">Text: </span><span class="sc">{</span>text<span class="sc">}</span><span class="ss">"</span>)</span>
-<span id="cb18-12"><a href="#cb18-12" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(<span class="ss">f"  True code: </span><span class="sc">{</span>example_true_codes[i]<span class="sc">}</span><span class="ss">"</span>)</span>
-<span id="cb18-13"><a href="#cb18-13" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> code, conf <span class="kw">in</span> <span class="bu">zip</span>(predicted_codes, confidence):</span>
-<span id="cb18-14"><a href="#cb18-14" aria-hidden="true" tabindex="-1"></a>        <span class="bu">print</span>(<span class="ss">f"  </span><span class="sc">{</span>code<span class="sc">}</span><span class="ss">  (confidence: </span><span class="sc">{</span>conf<span class="sc">:.3f}</span><span class="ss">)"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-</details>
+<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a>random_indices <span class="op">=</span> random.sample(<span class="bu">range</span>(<span class="bu">len</span>(X_test)), <span class="dv">3</span>)</span>
+<span id="cb18-4"><a href="#cb18-4" aria-hidden="true" tabindex="-1"></a>example_texts <span class="op">=</span> X_test[random_indices]</span>
+<span id="cb18-5"><a href="#cb18-5" aria-hidden="true" tabindex="-1"></a>example_true_codes <span class="op">=</span> y_test[random_indices]</span>
+<span id="cb18-6"><a href="#cb18-6" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(example_texts)</span>
+<span id="cb18-7"><a href="#cb18-7" aria-hidden="true" tabindex="-1"></a>top_k <span class="op">=</span> <span class="dv">5</span></span>
+<span id="cb18-8"><a href="#cb18-8" aria-hidden="true" tabindex="-1"></a>results <span class="op">=</span> ttc.predict(example_texts, top_k<span class="op">=</span>top_k, explain_with_captum<span class="op">=</span><span class="va">True</span>)</span>
+<span id="cb18-9"><a href="#cb18-9" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> i, text <span class="kw">in</span> <span class="bu">enumerate</span>(example_texts):</span>
+<span id="cb18-10"><a href="#cb18-10" aria-hidden="true" tabindex="-1"></a>    predicted_codes <span class="op">=</span> [results[<span class="st">"prediction"</span>][i][k] <span class="cf">for</span> k <span class="kw">in</span> <span class="bu">range</span>(top_k)]</span>
+<span id="cb18-11"><a href="#cb18-11" aria-hidden="true" tabindex="-1"></a>    confidence <span class="op">=</span> [results[<span class="st">"confidence"</span>][i][k].item() <span class="cf">for</span> k <span class="kw">in</span> <span class="bu">range</span>(top_k)]</span>
+<span id="cb18-12"><a href="#cb18-12" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(<span class="ss">f"</span><span class="ch">\n</span><span class="ss">Text: </span><span class="sc">{</span>text<span class="sc">}</span><span class="ss">"</span>)</span>
+<span id="cb18-13"><a href="#cb18-13" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(<span class="ss">f"  True code: </span><span class="sc">{</span>example_true_codes[i]<span class="sc">}</span><span class="ss">"</span>)</span>
+<span id="cb18-14"><a href="#cb18-14" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> code, conf <span class="kw">in</span> <span class="bu">zip</span>(predicted_codes, confidence):</span>
+<span id="cb18-15"><a href="#cb18-15" aria-hidden="true" tabindex="-1"></a>        <span class="bu">print</span>(<span class="ss">f"  </span><span class="sc">{</span>code<span class="sc">}</span><span class="ss">  (confidence: </span><span class="sc">{</span>conf<span class="sc">:.3f}</span><span class="ss">)"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 </section>
 <section id="question-2-visualise-word-attributions-for-the-top-prediction" class="level2" data-number="7.2">
