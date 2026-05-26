@@ -1066,7 +1066,12 @@ To sample random texts, you can use for instance <code>random.sample(range(len(X
 </section>
 <section id="question-2-visualise-word-attributions-for-the-top-prediction" class="level2" data-number="7.3">
 <h2 data-number="7.3" class="anchored" data-anchor-id="question-2-visualise-word-attributions-for-the-top-prediction"><span class="header-section-number">7.3</span> Question 2 — Visualise word attributions for the top prediction</h2>
-<p>Now, we want to retrieve the most important words driving the NACE prediction. During inference, the model computes an attribution score for each token — stored in the <code>captum_attributions</code> field of the results — indicating how much each token contributed to the final decision. To do so: - extract <code>captum_attributions</code> from results; - use <code>map_attributions_to_word()</code> and <code>map_attributions_to_char()</code> to aggregate token-level attribution scores up to the word and character levels; - visualize the resulting attributions with <code>plot_attributions_at_word()</code> and <code>plot_attributions_at_char()</code> from <code>torchTextClassifiers.utilities.plot_explainability</code>.</p>
+<p>Now, we want to retrieve the most important words driving the NACE prediction. During inference, the model computes an attribution score for each token — stored in the <code>captum_attributions</code> field of the results — indicating how much each token contributed to the final decision. To do so:</p>
+<ul>
+<li>extract <code>captum_attributions</code> from results;</li>
+<li>use <code>map_attributions_to_word()</code> and <code>map_attributions_to_char()</code> to aggregate token-level attribution scores up to the word and character levels;</li>
+<li>visualize the resulting attributions with <code>plot_attributions_at_word()</code> and <code>plot_attributions_at_char()</code> from <code>torchTextClassifiers.utilities.plot_explainability</code>.</li>
+</ul>
 <div class="callout callout-style-simple callout-note callout-titled">
 <div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-18-contents" aria-controls="callout-18" aria-expanded="false" aria-label="Toggle callout">
 <div class="callout-icon-container">
