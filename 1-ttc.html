@@ -214,7 +214,7 @@ window.Quarto = {
   </ul></li>
   <li><a href="#load-the-data" id="toc-load-the-data" class="nav-link" data-scroll-target="#load-the-data"><span class="header-section-number">2</span> Load the data</a></li>
   <li><a href="#split-the-data" id="toc-split-the-data" class="nav-link" data-scroll-target="#split-the-data"><span class="header-section-number">3</span> Split the data</a></li>
-  <li><a href="#applying-a-tokenizer" id="toc-applying-a-tokenizer" class="nav-link" data-scroll-target="#applying-a-tokenizer"><span class="header-section-number">4</span> Applying a tokenizer</a>
+  <li><a href="#sec-tokenizer" id="toc-sec-tokenizer" class="nav-link" data-scroll-target="#sec-tokenizer"><span class="header-section-number">4</span> Applying a tokenizer</a>
   <ul class="collapse">
   <li><a href="#why-tokenization" id="toc-why-tokenization" class="nav-link" data-scroll-target="#why-tokenization"><span class="header-section-number">4.1</span> Why tokenization?</a></li>
   <li><a href="#why-subword-tokenization" id="toc-why-subword-tokenization" class="nav-link" data-scroll-target="#why-subword-tokenization"><span class="header-section-number">4.2</span> Why subword tokenization?</a></li>
@@ -286,7 +286,7 @@ window.Quarto = {
 <tr class="even">
 <td><strong>RAG</strong> (see notebook 2)</td>
 <td>Retrieve similar examples, ask a LLM to decide</td>
-<td>Few labelled examples, need for explainability via retrieved context</td>
+<td>Few labelled examples</td>
 </tr>
 </tbody>
 </table>
@@ -315,7 +315,7 @@ window.Quarto = {
 <h2 data-number="1.4" class="anchored" data-anchor-id="what-you-will-learn"><span class="header-section-number">1.4</span> What you will learn</h2>
 <ul>
 <li>How to prepare and split a labelled text dataset</li>
-<li>How to train a subword tokenizer (WordPiece) on domain-specific text</li>
+<li>How to train a subword tokenizer (WordPiece) on domain-specific text (tokenizers are introduced in <a href="#sec-tokenizer" class="quarto-xref">Section&nbsp;4</a>)</li>
 <li>How to configure and train a neural text classifier end-to-end</li>
 <li>How to load a pretrained model from MLflow and run inference</li>
 <li>How to interpret predictions using the <a href="https://captum.ai/docs/introduction">Captum</a> package</li>
@@ -355,7 +355,7 @@ MLFLOW_TRACKING_PASSWORD=&lt;add your password&gt;</code></pre>
 </section>
 <section id="load-the-data" class="level1" data-number="2">
 <h1 data-number="2"><span class="header-section-number">2</span> Load the data</h1>
-<p>The dataset consists of <strong>synthetic labelled examples</strong> generated for the NACE 2025 nomenclature. Each row contains a short text description (<code>label</code>) and the corresponding NACE code (<code>code</code>).</p>
+<p>The dataset consists of <strong>synthetic labelled examples</strong> generated for the NACE rev 2.1 nomenclature. Each row contains a short text description (<code>label</code>) and the corresponding NACE code (<code>code</code>).</p>
 <div class="callout callout-style-default callout-tip no-icon callout-titled">
 <div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-1-contents" aria-controls="callout-1" aria-expanded="true" aria-label="Toggle callout">
 <div class="callout-icon-container">
@@ -383,7 +383,7 @@ MLFLOW_TRACKING_PASSWORD=&lt;add your password&gt;</code></pre>
 </section>
 <section id="question-2-load-the-dataset-from-s3" class="level2" data-number="2.2">
 <h2 data-number="2.2" class="anchored" data-anchor-id="question-2-load-the-dataset-from-s3"><span class="header-section-number">2.2</span> Question 2 — Load the dataset from s3</h2>
-<p>Use Polars to load the parquet file directly from this public URL:</p>
+<p>Use <a href="https://docs.pola.rs/api/python/stable/reference/index.html">Polars</a> to load the parquet file directly from this public URL:</p>
 <pre><code>https://minio.lab.sspcloud.fr/projet-formation/diffusion/funathon/2026/project2/generation_None_temp08.parquet</code></pre>
 <p>Print the first rows and the total number of observations. Do you understand all columns?</p>
 <details>
@@ -581,7 +581,7 @@ Clue here
 </div>
 </div>
 </section>
-<section id="applying-a-tokenizer" class="level1" data-number="4">
+<section id="sec-tokenizer" class="level1" data-number="4">
 <h1 data-number="4"><span class="header-section-number">4</span> Applying a tokenizer</h1>
 <section id="why-tokenization" class="level2" data-number="4.1">
 <h2 data-number="4.1" class="anchored" data-anchor-id="why-tokenization"><span class="header-section-number">4.1</span> Why tokenization?</h2>
