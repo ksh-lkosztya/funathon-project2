@@ -221,10 +221,6 @@ window.Quarto = {
   </ul></li>
   <li><a href="#model-architecture" id="toc-model-architecture" class="nav-link" data-scroll-target="#model-architecture"><span class="header-section-number">5</span> Model architecture</a></li>
   <li><a href="#training" id="toc-training" class="nav-link" data-scroll-target="#training"><span class="header-section-number">6</span> Training</a></li>
-  <li><a href="#prediction-and-explainability" id="toc-prediction-and-explainability" class="nav-link" data-scroll-target="#prediction-and-explainability"><span class="header-section-number">7</span> Prediction and explainability</a>
-  <ul class="collapse">
-  <li><a href="#conclusion" id="toc-conclusion" class="nav-link" data-scroll-target="#conclusion"><span class="header-section-number">7.4</span> Conclusion</a></li>
-  </ul></li>
   </ul>
 <div class="toc-actions"><ul><li><a href="https://github.com/AIML4OS/funathon-project2/edit/main/1-ttc.qmd" class="toc-action"><i class="bi bi-github"></i>Edit this page</a></li><li><a href="https://github.com/AIML4OS/funathon-project2/issues/new" class="toc-action"><i class="bi empty"></i>Report an issue</a></li></ul></div></nav>
     </div>
@@ -254,7 +250,7 @@ window.Quarto = {
 <h1 data-number="1"><span class="header-section-number">1</span> Forewords</h1>
 <section id="the-problem-classifying-free-text-activity-descriptions" class="level2" data-number="1.1">
 <h2 data-number="1.1" class="anchored" data-anchor-id="the-problem-classifying-free-text-activity-descriptions"><span class="header-section-number">1.1</span> The problem: classifying free-text activity descriptions</h2>
-<p>Given a short text description of a business activity — such as <em>“I sell croissants and pains au chocolat”</em> — the goal is to automatically assign the correct <strong>NACE 2.1 activity code</strong> from hundreds of possible categories. This is a <strong>supervised multiclass classification</strong> problem.</p>
+<p>Given a short text description of a business activity — such as <em>“I sell croissants and pains au chocolat”</em> — the objective is to find automatically the correct <strong>NACE 2.1 activity code</strong> from hundreds of possible codes. This is a <strong>supervised multiclass classification</strong> problem.</p>
 </section>
 <section id="supervised-learning-or-rag" class="level2" data-number="1.2">
 <h2 data-number="1.2" class="anchored" data-anchor-id="supervised-learning-or-rag"><span class="header-section-number">1.2</span> Supervised learning or RAG?</h2>
@@ -458,12 +454,15 @@ The <code>.n_unique()</code> method in Polars may help you computing the number 
 <div class="callout-body-container callout-body">
 <section id="question-1-split-the-dataset-into-train-validation-test-sets" class="level2" data-number="3.1">
 <h2 data-number="3.1" class="anchored" data-anchor-id="question-1-split-the-dataset-into-train-validation-test-sets"><span class="header-section-number">3.1</span> Question 1 — Split the dataset into train / validation / test sets</h2>
-<p>Use <code>train_test_split</code> from <code>sklearn.model_selection</code> to split the dataset into train, validation, and test sets (70% / 15% / 15%). Do not forget to choose a <code>random_state</code>.</p>
+<p>Use <code>train_test_split</code> from <code>sklearn.model_selection</code> to split the dataset into train, validation, and test sets (70% / 15% / 15%). Do not forget to choose a <code>random_state</code>. Separate the target <code>y</code> from the features <code>X</code>, and convert them to <code>numpy</code> arrays. You should obtain objects <code>X_train</code>, <code>y_train</code>, and so on.</p>
 <details>
 <summary>
 Clue here
 </summary>
-<code>train_test_split</code> splits a dataset in two — call it twice to get three subsets.
+<ul>
+<li><code>train_test_split</code> splits a dataset in two — call it twice to get three subsets.</li>
+<li>You may use the <code>to_numpy</code> method to convert to <code>numpy</code> arrays.</li>
+</ul>
 </details>
 <div id="split-fn" class="cell" data-execution_count="4">
 <details class="code-fold">
@@ -763,7 +762,7 @@ Instantiate <code>WordPieceTokenizer(vocab_size=5000, output_dim=10)</code> and 
 <li><p><a href="https://inseefrlab.github.io/torchTextClassifiers/architecture/overview.html#component-4-classification-head"><strong>ClassificationHead</strong></a>: projects the final representation onto <code>num_classes</code> dimensions. The highest value determines the predicted class.</p></li>
 </ol>
 <p><strong>To learn more about the building blocks of the torchTextClassifiers package, please visit the <a href="https://inseefrlab.github.io/torchTextClassifiers/architecture/index.html">documentation</a>.</strong></p>
-<p>These are configured through <code>ModelConfig</code> and assembled automatically by <code>torchTextClassifiers</code>. You can see some <code>ModelConfig</code> examples <a href="https://inseefrlab.github.io/torchTextClassifiers/architecture/overview.html#usage-examples">here</a> and for <code>torchTextClassifiers</code> <a href="https://inseefrlab.github.io/torchTextClassifiers/api/wrapper.html">here</a></p>
+<p>These are configured through <code>ModelConfig</code> and assembled automatically by <code>torchTextClassifiers</code>. You can see some <code>ModelConfig</code> examples <a href="https://inseefrlab.github.io/torchTextClassifiers/architecture/overview.html#usage-examples">here</a> and for <code>torchTextClassifiers</code> <a href="https://inseefrlab.github.io/torchTextClassifiers/api/wrapper.html">here</a>.</p>
 </section>
 <section id="training" class="level1" data-number="6">
 <h1 data-number="6"><span class="header-section-number">6</span> Training</h1>
@@ -782,7 +781,7 @@ Instantiate <code>WordPieceTokenizer(vocab_size=5000, output_dim=10)</code> and 
 <li><code>patience_early_stopping</code>: stop training if the validation loss has not improved for this many epochs, to avoid overfitting.</li>
 </ul>
 <div class="callout callout-style-default callout-tip no-icon callout-titled">
-<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-16-contents" aria-controls="callout-16" aria-expanded="true" aria-label="Toggle callout">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-19-contents" aria-controls="callout-19" aria-expanded="true" aria-label="Toggle callout">
 <div class="callout-icon-container">
 <i class="callout-icon no-icon"></i>
 </div>
@@ -791,7 +790,7 @@ Instantiate <code>WordPieceTokenizer(vocab_size=5000, output_dim=10)</code> and 
 </div>
 <div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
 </div>
-<div id="callout-16" class="callout-16-contents callout-collapse collapse show">
+<div id="callout-19" class="callout-19-contents callout-collapse collapse show">
 <div class="callout-body-container callout-body">
 <p><code>torchTextClassifiers</code> provides a high-level wrapper that combines the value encoder, tokenizer, model components, and training loop. You will do two things: create a model, and then train the model. It is important to distinguish these two steps clearly. To do so, <code>torchTextClassifiers</code> offers two tools: <code>ModelConfig</code> defines the model and <code>TrainingConfig</code> defines the training process.</p>
 <section id="question-1-create-the-classifier" class="level2" data-number="6.1">
@@ -840,12 +839,7 @@ Build a <code>ModelConfig</code> with <code>embedding_dim</code> and <code>num_c
 </section>
 <section id="question-2-prepare-training" class="level2" data-number="6.2">
 <h2 data-number="6.2" class="anchored" data-anchor-id="question-2-prepare-training"><span class="header-section-number">6.2</span> Question 2 — Prepare training</h2>
-<details>
-<summary>
-Clue here
-</summary>
-Create a <code>TrainingConfig(lr=..., batch_size=..., num_epochs=...)</code> and call <code>ttc.train(X_train=..., y_train=..., X_val=..., y_val=..., training_config=..., verbose=True)</code>. Train on a small subsample so it completes quickly. <strong>Use only 1 epoch for fast training</strong>.
-</details>
+<p>Create a <code>TrainingConfig(lr=..., batch_size=..., num_epochs=...)</code>. Look at the <a href="https://inseefrlab.github.io/torchTextClassifiers/api/configs.html#trainingconfig">documentation</a>. Do you understand what each argument does? <strong>Use only 1 epoch for fast training</strong>.</p>
 <div class="callout callout-style-simple callout-note callout-titled">
 <div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-12-contents" aria-controls="callout-12" aria-expanded="false" aria-label="Toggle callout">
 <div class="callout-icon-container">
@@ -981,9 +975,37 @@ Call <code>ttc.train(X_train=..., y_train=..., X_val=..., y_val=..., training_co
 </div>
 </div>
 </section>
-<section id="question-3-load-the-pretrained-model-from-mlflow" class="level2" data-number="6.4">
-<h2 data-number="6.4" class="anchored" data-anchor-id="question-3-load-the-pretrained-model-from-mlflow"><span class="header-section-number">6.4</span> Question 3 — Load the pretrained model from MLflow</h2>
-<p>We provide a <strong>pretrained model</strong> trained on the full dataset with many epochs. Load it as such:</p>
+<section id="prediction-and-explainability" class="level1" data-number="7">
+<h1 data-number="7"><span class="header-section-number">7</span> Prediction and explainability</h1>
+<p>Once the model is trained, we can use it to predict NACE codes for new text descriptions. Beyond a simple prediction, we also want to understand why a given NACE code was predicted — specifically, which words in the input text contributed the most to the decision. To understand which words influenced a prediction, we use a technique called <strong>integrated gradients</strong> (via Captum’s <code>LayerIntegratedGradients</code>). It assigns a score to each word in the input: a high score means that word pushed the model toward the predicted class. You can refer to this <a href="https://inseefrlab.github.io/torchTextClassifiers/tutorials/explainability.html">tutorial</a> on explainability for more details.</p>
+<div class="callout callout-style-default callout-important callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Important</span>On the interpretation of integrated gradients
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Scores based on integrated gradients are a useful guide, not a definitive explanation. Treat them as a way to explore the model’s behavior, <strong>not as proof of causality</strong>.</p>
+</div>
+</div>
+<div class="callout callout-style-default callout-tip no-icon callout-titled">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-18-contents" aria-controls="callout-18" aria-expanded="true" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Tip</span><i class="bi bi-book"></i> Exercice 5: Generate predictions and inspect attributions
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-18" class="callout-18-contents callout-collapse collapse show">
+<div class="callout-body-container callout-body">
+<section id="question-0-load-the-pretrained-model-from-mlflow" class="level2" data-number="7.1">
+<h2 data-number="7.1" class="anchored" data-anchor-id="question-0-load-the-pretrained-model-from-mlflow"><span class="header-section-number">7.1</span> Question 0 — Load the pretrained model from MLflow</h2>
+<p>We provide a <strong>pretrained model</strong> trained on the full dataset with many epochs. Load it using this code:</p>
 <div id="load-public" class="cell" data-execution_count="12">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb17"><pre class="sourceCode python code-overflow-scroll code-with-copy"><code class="sourceCode python"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a>local_dir <span class="op">=</span> mlflow.artifacts.download_artifacts(</span>
 <span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a>    artifact_uri<span class="op">=</span><span class="st">"s3://projet-funathon/mlflow-artifacts/2/9a5f1b62a991429492b88575fb108f5c/artifacts/model_artifacts/"</span></span>
@@ -995,42 +1017,8 @@ Call <code>ttc.train(X_train=..., y_train=..., X_val=..., y_val=..., training_co
 <span id="cb17-8"><a href="#cb17-8" aria-hidden="true" tabindex="-1"></a>ttc.pytorch_model.<span class="bu">eval</span>()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 </section>
-</div>
-</div>
-</div>
-</section>
-<section id="prediction-and-explainability" class="level1" data-number="7">
-<h1 data-number="7"><span class="header-section-number">7</span> Prediction and explainability</h1>
-<p>Once the model is trained, we can use it to predict NACE codes for new text descriptions. Beyond a simple prediction, we also want to understand why a given NACE code was predicted — specifically, which words in the input text contributed the most to the decision.</p>
-<p>You can refer to this <a href="https://inseefrlab.github.io/torchTextClassifiers/tutorials/explainability.html">tutorial</a> on explainability for more details.</p>
-<p>To understand which words influenced a prediction, we use a technique called <strong>integrated gradients</strong> (via Captum’s <code>LayerIntegratedGradients</code>). It assigns a score to each word in the input: a high score means that word pushed the model toward the predicted class.</p>
-<div class="callout callout-style-default callout-important callout-titled">
-<div class="callout-header d-flex align-content-center">
-<div class="callout-icon-container">
-<i class="callout-icon"></i>
-</div>
-<div class="callout-title-container flex-fill">
-<span class="screen-reader-only">Important</span>On the interpretation of integrated gradients
-</div>
-</div>
-<div class="callout-body-container callout-body">
-<p>These scores are a useful guide, not a definitive explanation. Treat them as a way to explore the model’s behavior, not as proof of causality.</p>
-</div>
-</div>
-<div class="callout callout-style-default callout-tip no-icon callout-titled">
-<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-19-contents" aria-controls="callout-19" aria-expanded="true" aria-label="Toggle callout">
-<div class="callout-icon-container">
-<i class="callout-icon no-icon"></i>
-</div>
-<div class="callout-title-container flex-fill">
-<span class="screen-reader-only">Tip</span><i class="bi bi-book"></i> Exercice 5: Generate predictions and inspect attributions
-</div>
-<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
-</div>
-<div id="callout-19" class="callout-19-contents callout-collapse collapse show">
-<div class="callout-body-container callout-body">
-<section id="question-1-generate-top-5-predictions-with-confidence-scores" class="level2" data-number="7.1">
-<h2 data-number="7.1" class="anchored" data-anchor-id="question-1-generate-top-5-predictions-with-confidence-scores"><span class="header-section-number">7.1</span> Question 1 — Generate top-5 predictions with confidence scores</h2>
+<section id="question-1-generate-top-5-predictions-with-confidence-scores" class="level2" data-number="7.2">
+<h2 data-number="7.2" class="anchored" data-anchor-id="question-1-generate-top-5-predictions-with-confidence-scores"><span class="header-section-number">7.2</span> Question 1 — Generate top-5 predictions with confidence scores</h2>
 <p>Sample a few texts from the <code>X_test</code> array into a variable called <code>example_texts</code>. Then call <code>ttc.predict(np.array(example_texts), top_k=5, explain_with_captum=True)</code> and print the main fields of the resulting dictionary. The result is a dictionary with keys <code>prediction</code>, <code>confidence</code> and <code>captum_attributions</code> among others.</p>
 <details>
 <summary>
@@ -1056,11 +1044,11 @@ To sample random texts, you can use for instance <code>random.sample(range(len(X
 <span id="cb18-15"><a href="#cb18-15" aria-hidden="true" tabindex="-1"></a>        <span class="bu">print</span>(<span class="ss">f"  </span><span class="sc">{</span>code<span class="sc">}</span><span class="ss">  (confidence: </span><span class="sc">{</span>conf<span class="sc">:.3f}</span><span class="ss">)"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 </section>
-<section id="question-2-visualise-word-attributions-for-the-top-prediction" class="level2" data-number="7.2">
-<h2 data-number="7.2" class="anchored" data-anchor-id="question-2-visualise-word-attributions-for-the-top-prediction"><span class="header-section-number">7.2</span> Question 2 — Visualise word attributions for the top prediction</h2>
+<section id="question-2-visualise-word-attributions-for-the-top-prediction" class="level2" data-number="7.3">
+<h2 data-number="7.3" class="anchored" data-anchor-id="question-2-visualise-word-attributions-for-the-top-prediction"><span class="header-section-number">7.3</span> Question 2 — Visualise word attributions for the top prediction</h2>
 <p>Now, we want to retrieve the most important words driving the NACE prediction. During inference, the model computes an attribution score for each token — stored in the <code>captum_attributions</code> field of the results — indicating how much each token contributed to the final decision. To do so: - extract <code>captum_attributions</code> from results; - use <code>map_attributions_to_word()</code> and <code>map_attributions_to_char()</code> to aggregate token-level attribution scores up to the word and character levels; - visualize the resulting attributions with <code>plot_attributions_at_word()</code> and <code>plot_attributions_at_char()</code> from <code>torchTextClassifiers.utilities.plot_explainability</code>.</p>
 <div class="callout callout-style-simple callout-note callout-titled">
-<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-18-contents" aria-controls="callout-18" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-17-contents" aria-controls="callout-17" aria-expanded="false" aria-label="Toggle callout">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
 </div>
@@ -1069,7 +1057,7 @@ To sample random texts, you can use for instance <code>random.sample(range(len(X
 </div>
 <div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
 </div>
-<div id="callout-18" class="callout-18-contents callout-collapse collapse">
+<div id="callout-17" class="callout-17-contents callout-collapse collapse">
 <div class="callout-body-container callout-body">
 <ul>
 <li><code>captum_attributions</code>: tensor of shape <code>(n_text, top_k, seq_len)</code> — attribution scores per token (how much a token has driven a given prediction).</li>
@@ -1113,8 +1101,8 @@ To sample random texts, you can use for instance <code>random.sample(range(len(X
 </details>
 </div>
 </section>
-<section id="question-3-evaluate-accuracy-on-the-test-set" class="level2" data-number="7.3">
-<h2 data-number="7.3" class="anchored" data-anchor-id="question-3-evaluate-accuracy-on-the-test-set"><span class="header-section-number">7.3</span> Question 3 — Evaluate accuracy on the test set</h2>
+<section id="question-3-evaluate-accuracy-on-the-test-set" class="level2" data-number="7.4">
+<h2 data-number="7.4" class="anchored" data-anchor-id="question-3-evaluate-accuracy-on-the-test-set"><span class="header-section-number">7.4</span> Question 3 — Evaluate accuracy on the test set</h2>
 <p>Run <code>ttc(X_test, top_k=1)</code> and compare the predictions against <code>y_test</code> to compute accuracy.</p>
 <div id="evaluate" class="cell" data-execution_count="15">
 <details class="code-fold">
@@ -1129,8 +1117,8 @@ To sample random texts, you can use for instance <code>random.sample(range(len(X
 </div>
 </div>
 </div>
-<section id="conclusion" class="level2" data-number="7.4">
-<h2 data-number="7.4" class="anchored" data-anchor-id="conclusion"><span class="header-section-number">7.4</span> Conclusion</h2>
+<section id="conclusion" class="level2" data-number="7.5">
+<h2 data-number="7.5" class="anchored" data-anchor-id="conclusion"><span class="header-section-number">7.5</span> Conclusion</h2>
 <p>Not bad at all! The model reaches strong accuracy on the held-out test set — a genuinely production-ready classifier for NACE 2.1 codes.</p>
 <p>In this notebook we learnt how to:</p>
 <ul>
@@ -1148,6 +1136,10 @@ To sample random texts, you can use for instance <code>random.sample(range(len(X
 
 
 </section>
+</section>
+</div>
+</div>
+</div>
 </section>
 
 </main> <!-- /main -->
