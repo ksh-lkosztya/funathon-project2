@@ -593,12 +593,16 @@ Clue here
 <li><strong>Pad or truncate</strong> the resulting sequence to a fixed length so that all inputs have the same shape, which is required for batched training.</li>
 </ol>
 <p>The diagram below illustrates this pipeline on a short example:</p>
-<div class="cell" data-layout-align="default">
+<div class="cell" data-eval="true" data-layout-align="default">
 <div class="cell-output-display">
 <div>
 <p></p><figure class="figure"><p></p>
 <div>
-
+<pre class="mermaid mermaid-js">flowchart LR
+    A["#quot;I sell croissants#quot;"] --&gt;|"split into tokens"| B["[#quot;i#quot;, #quot;sell#quot;, #quot;croi#quot;, #quot;##ssants#quot;]"]
+    B --&gt;|"look up in vocabulary"| C["[45, 112, 87, 203]"]
+    C --&gt;|"pad to length 6"| D["[45, 112, 87, 203, 0, 0]"]
+</pre>
 </div>
 <p></p></figure><p></p>
 </div>
