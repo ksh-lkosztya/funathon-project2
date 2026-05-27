@@ -6,6 +6,7 @@ from sklearn.model_selection import train_test_split
 from sklearn.preprocessing import LabelEncoder
 from torchTextClassifiers.value_encoder import ValueEncoder
 from torchTextClassifiers.tokenizers import WordPieceTokenizer
+from torchTextClassifiers import ModelConfig, TrainingConfig, torchTextClassifiers
 
 # %%
 # load environment variables
@@ -88,6 +89,19 @@ print(
 )
 
 # %%
+# Create the classifier
+
+embedding_dim = 96
+
+model_config = ModelConfig(
+    embedding_dim=embedding_dim,
+    num_classes=n_classes,)
+
+ttc = torchTextClassifiers(
+    tokenizer=tokenizer,
+    model_config=model_config,
+    value_encoder=value_encoder,
+)
 
 # %%
 
