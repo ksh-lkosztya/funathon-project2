@@ -1,5 +1,6 @@
 import mlflow
 import polars as pl
+import s3fs
 
 from dotenv import load_dotenv
 from sklearn.model_selection import train_test_split
@@ -20,7 +21,9 @@ print("Q1 end")
 # %%
 # Load the dataset from s3
 
-df = pl.read_parquet("https://minio.lab.sspcloud.fr/projet-formation/diffusion/funathon/2026/project2/generation_None_temp08.parquet")
+df = pl.read_parquet(
+    "https://minio.lab.sspcloud.fr/projet-formation/diffusion/funathon/2026/project2/generation_None_temp08.parquet"
+)
 
 print(df.head())
 print(f"Total rows: {len(df)}")
@@ -140,7 +143,6 @@ with mlflow.start_run() as run:
 print("traning ready")
 # %%
 # Load the pretrained model from MLflow
-import s3fs
 
 fs = s3fs.S3FileSystem(
     anon=True,  # public bucket
