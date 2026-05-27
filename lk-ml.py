@@ -95,7 +95,8 @@ embedding_dim = 96
 
 model_config = ModelConfig(
     embedding_dim=embedding_dim,
-    num_classes=n_classes,)
+    num_classes=n_classes,
+)
 
 ttc = torchTextClassifiers(
     tokenizer=tokenizer,
@@ -103,6 +104,7 @@ ttc = torchTextClassifiers(
     value_encoder=value_encoder,
 )
 
+print(" tcc created")
 # %%
 
 # %%
