@@ -20,4 +20,7 @@ MLFLOW_TRACKING_PASSWORD=<add your password>
 ```
 MLflow credentials are given in the panel that opens when you launch the MLflow service on the SSPCloud.
 
+MLFLOW_TRACKING_URI=https://user-kshlkosztya-mlflow.user.lab.sspcloud.fr/
+MLFLOW_TRACKING_USERNAME=...kshlkosztya
+MLFLOW_TRACKING_PASSWORD=t5xybc62v??egeyvx2h2cf
 
