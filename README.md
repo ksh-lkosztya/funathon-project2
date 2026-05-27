@@ -24,3 +24,6 @@ MLFLOW_TRACKING_URI=https://user-kshlkosztya-mlflow.user.lab.sspcloud.fr/
 MLFLOW_TRACKING_USERNAME=...kshlkosztya
 MLFLOW_TRACKING_PASSWORD=t5xybc62v??egeyvx2h2cf
 
+# simple run file not alvays working ..
+$ uv run lk-ml-py
+# working enstead ..
