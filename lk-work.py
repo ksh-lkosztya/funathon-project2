@@ -11,8 +11,8 @@ df = pd.read_parquet(
 )
 df.head()
 
-# %%
+## %%
 df["code"].value_counts().head(10).plot(kind="bar")
 print(df.head())
 
-# %%
+## %%

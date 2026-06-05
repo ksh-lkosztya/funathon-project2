@@ -1,0 +1,17 @@
+{
+  "$schema": "https://opencode.ai/config.json",
+  "provider": {
+    "ollama": {
+      "npm": "@ai-sdk/openai-compatible",
+      "name": "Ollama (local)",
+      "options": {
+        "baseURL": "http://localhost:11434/v1"
+      },
+      "models": {
+        "MFDoom/deepseek-coder-v2-tool-calling:16b": {
+          "name": "MFDoom/deepseek-coder-v2-tool-calling:16b"
+        }
+      }
+    }
+  }
+}

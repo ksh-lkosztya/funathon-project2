@@ -3,6 +3,10 @@ Repository of the 2nd funathon project (NLP)
 
 Subject's website deployed here : https://aiml4os.github.io/funathon-project2/
 
+$ pip install --proxy http://fproxy.kshad.hu:8080/ -r requirements.txt
+
+
+
 $ uv sync
 
 # simple run file not alvays working ..
@@ -31,3 +35,17 @@ MLFLOW_TRACKING_URI=https://user-kshlkosztya-mlflow.user.lab.sspcloud.fr/
 MLFLOW_TRACKING_USERNAME=...kshlkosztya
 MLFLOW_TRACKING_PASSWORD=t5xybc62v??egeyvx2h2cf
 
+$ npm install -g omniroute
+
+# run :
+$ omniroute
+
+local p. :: 'To...Ma...99'
+
+PNHK-CSHG
+
+# connect to Kiro AI as they have free assecc to  
+# go to Api Manager
+
+# key created
+sk-9fe63e4ef55d39f1-7353a6-2b022378
